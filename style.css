@@ -316,100 +316,55 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
 .back-top:hover { color: var(--text); text-decoration: none; }
 
 
-/* WIDGET JAM & PRAYER TIMES */
-.time-prayer-widget {
-    margin-top: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.5rem;
-}
-
-.current-time-box {
-    flex: 1;
-    min-width: 200px;
-    border-right: 1px solid var(--border);
-    padding-right: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#realtime-clock {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: var(--accent);
-    line-height: 1.2;
-    margin-bottom: 0.2rem;
-}
-
-#realtime-date {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin: 0;
-}
-
-.prayer-times-box {
-    flex: 2;
-    min-width: 250px;
-}
-
-.prayer-times-box h4 {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 1rem;
-}
-
+/* --- UPDATE: JADWAL SHALAT BERTUMPUK --- */
 .prayer-list {
     list-style: none;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
+    flex-direction: column; /* Ini yang membuat elemen bertumpuk ke bawah */
+    gap: 0.75rem;
+    padding: 0;
 }
 
 .prayer-item {
-    flex: 1;
-    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Teks di kiri, jam di kanan */
     background-color: var(--bg);
     border: 1px solid var(--border);
-    padding: 0.6rem;
+    padding: 0.75rem 1.25rem;
     border-radius: 6px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.prayer-item:hover {
+    transform: translateX(5px); /* Efek meluncur sedikit ke kanan saat kursor diarahkan */
+    border-color: var(--accent);
+}
+
+.prayer-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.prayer-icon {
+    color: var(--accent);
+    font-size: 1.1rem;
+    width: 25px; /* Menjaga agar jarak teks tetap rata meski lebar ikon berbeda */
     text-align: center;
 }
 
 .prayer-name {
-    display: block;
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
-    margin-bottom: 0.2rem;
+    font-weight: 500;
 }
 
 .prayer-time {
-    display: block;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: var(--text);
 }
-
-/* Penyesuaian untuk HP */
-@media (max-width: 650px) {
-    .current-time-box {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        padding-right: 0;
-        padding-bottom: 1.5rem;
-        text-align: center;
-    }
-    .prayer-times-box h4 {
-        text-align: center;
-    }
-}
-
 
 /* RESPONSIVE */
 @media (max-width: 650px) {
@@ -434,44 +389,4 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
     
     /* Agar header tidak terlalu lebar di HP */
     .logo-title { display: none; } 
-}
-
-.availability-status {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    padding: 0.5rem 0.8rem;
-    background-color: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 50px;
-    display: inline-flex;
-}
-
-.status-text {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
-
-.pulse-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #22c55e; /* Warna hijau success */
-    border-radius: 50%;
-    position: relative;
-}
-
-.pulse-dot::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: #22c55e;
-    border-radius: 50%;
-    animation: pulse 1.5s infinite ease-out;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(2.5); opacity: 0; }
 }
