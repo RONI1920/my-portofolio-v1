@@ -216,12 +216,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             const data = await response.json();
             const timings = data.data.timings;
 
+// 1. Update daftar array ini untuk menambahkan properti 'icon'
             const prayers = [
-                { name: 'Subuh', time: timings.Fajr },
-                { name: 'Dzuhur', time: timings.Dhuhr },
-                { name: 'Ashar', time: timings.Asr },
-                { name: 'Maghrib', time: timings.Maghrib },
-                { name: 'Isya', time: timings.Isha }
+                { name: 'Subuh', time: timings.Fajr, icon: 'fa-person-praying' }, // Ikon orang sujud
+                { name: 'Dzuhur', time: timings.Dhuhr, icon: 'fa-sun' },           // Ikon matahari siang
+                { name: 'Ashar', time: timings.Asr, icon: 'fa-cloud-sun' },        // Ikon matahari berawan
+                { name: 'Maghrib', time: timings.Maghrib, icon: 'fa-moon' },       // Ikon bulan
+                { name: 'Isya', time: timings.Isha, icon: 'fa-star-and-crescent'}  // Ikon bulan bintang Islam
             ];
 
             // 3. SIMPAN KE CACHE: Simpan tanggal dan data jadwal ke browser pengguna
@@ -237,11 +238,14 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     }
 
-    // Fungsi kecil untuk menampilkan HTML agar kode lebih rapi
+// 2. Update fungsi render ini untuk memasukkan struktur HTML yang baru
     function renderPrayers(prayers, container) {
         container.innerHTML = prayers.map(p => `
             <li class="prayer-item">
-                <span class="prayer-name">${p.name}</span>
+                <div class="prayer-info">
+                    <i class="fa-solid ${p.icon} prayer-icon"></i>
+                    <span class="prayer-name">${p.name}</span>
+                </div>
                 <span class="prayer-time">${p.time}</span>
             </li>
         `).join('');
