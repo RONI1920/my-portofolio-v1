@@ -232,64 +232,66 @@
 
     <div class="divider"></div>
 
-    <section class="section">
-    <div class="container">
-        
-        <div class="time-prayer-widget">
-            <div class="current-time-box">
-                <h3 id="realtime-clock">00:00:00</h3>
-                <p id="realtime-date">Memuat tanggal...</p>
-            </div>
-            
-            <div class="prayer-times-box">
-                <h4 style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;">
-                    Jadwal Shalat — Jakarta
-                </h4>
-                <ul class="prayer-list" id="prayer-list">
-                    <li style="font-size: 0.85rem; color: var(--text-muted);">Memuat jadwal dari API...</li>
-                </ul>
-            </div>
-        </div>
-
-    </div>
-</section>
-
     <section id="contact" class="section">
-      <div class="container section-grid">
-        <div class="section-label">
-          <span>05</span>
-          <h2>Contact</h2>
-        </div>
-        <div class="section-content">
-          <p>I am open to collaboration, freelance projects, and technical discussions. Let's connect.</p>
-          <div class="contact-list">
+      <div class="container contact-container">
 
-            <div class="contact-item">
-              <span class="contact-label"><i class="fab fa-github"></i> GitHub</span>
-              <a href="https://github.com/RONI1920" target="_blank" rel="noopener"
-                class="contact-value">github.com/RONI1920</a>
+        <div class="section-grid">
+          <div class="section-label">
+            <span>05</span>
+            <h2>Contact</h2>
+          </div>
+          <div class="section-content">
+            <p>I am open to collaboration, freelance projects, and technical discussions. Let's connect.</p>
+            <div class="contact-list">
+              <div class="contact-item">
+                <span class="contact-label"><i class="fab fa-github"></i> GitHub</span>
+                <a href="https://github.com/RONI1920" target="_blank" rel="noopener"
+                  class="contact-value">github.com/RONI1920</a>
+              </div>
+              <div class="contact-item">
+                <span class="contact-label"><i class="fas fa-envelope"></i> Email</span>
+                <a href="mailto:Contactme@ronihidayat.my.id?subject=Portfolio Inquiry"
+                  class="contact-value">Contactme@ronihidayat.my.id</a>
+              </div>
+              <div class="contact-item">
+                <span class="contact-label"><i class="fab fa-linkedin"></i> LinkedIn</span>
+                <a href="https://www.linkedin.com/in/roni-hidayat0692/" target="_blank" class="contact-value">Roni
+                  Hidayat LinkedIn</a>
+              </div>
+              <div class="contact-item">
+                <span class="contact-label"><i class="fab fa-whatsapp"></i> WhatsApp</span>
+                <a href="https://wa.me/6282298056092?text=Halo%20Roni,%20saya%20tertarik%20untuk%20berdiskusi."
+                  target="_blank" class="contact-value">+62 822-9805-6092</a>
+              </div>
             </div>
-
-            <div class="contact-item">
-              <span class="contact-label"><i class="fas fa-envelope"></i> Email</span>
-              <a href="mailto:Contactme@ronihidayat.my.id?subject=Portfolio Inquiry"
-                class="contact-value">Contactme@ronihidayat.my.id</a>
-            </div>
-
-            <div class="contact-item">
-              <span class="contact-label"><i class="fab fa-linkedin"></i> LinkedIn</span>
-              <a href="https://www.linkedin.com/in/roni-hidayat0692/" target="_blank" class="contact-value">Roni Hidayat
-                LinkedIn</a>
-            </div>
-
-            <div class="contact-item">
-              <span class="contact-label"><i class="fab fa-whatsapp"></i> WhatsApp</span>
-              <a href="https://wa.me/6282298056092?text=Halo%20Roni,%20saya%20tertarik%20untuk%20berdiskusi."
-                target="_blank" class="contact-value">+62 822-9805-6092</a>
-            </div>
-
           </div>
         </div>
+
+        <div class="time-prayer-widget">
+          <div class="current-time-box"
+            style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+
+            <div class="analog-clock">
+              <div class="hand hour-hand" id="hour-hand"></div>
+              <div class="hand minute-hand" id="minute-hand"></div>
+              <div class="hand second-hand" id="second-hand"></div>
+              <div class="clock-center"></div>
+            </div>
+
+            <p id="realtime-date" style="margin-top: 1rem;">Memuat tanggal...</p>
+          </div>
+
+          <div class="prayer-times-box">
+            <h4
+              style="margin-bottom: 1rem; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase;">
+              Jadwal Shalat — Jakarta
+            </h4>
+            <ul class="prayer-list" id="prayer-list">
+              <li style="font-size: 0.85rem; color: var(--text-muted);">Memuat jadwal dari API...</li>
+            </ul>
+          </div>
+        </div>
+
       </div>
     </section>
 
