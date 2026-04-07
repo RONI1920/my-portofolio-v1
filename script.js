@@ -125,6 +125,38 @@
         });
     }
 
+    // --- SMOOTH SCROLL DENGAN JARAK HEADER DINAMIS ---
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        // Abaikan jika href hanya "#" (biasanya untuk back-to-top)
+        if (this.getAttribute('href') === '#') return;
+
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+
+        if (!targetElement) return;
+
+        e.preventDefault();
+
+        // Ambil tinggi header saat ini (otomatis menyesuaikan HP/Desktop)
+        const header = document.querySelector('header');
+        const headerHeight = header ? header.getBoundingClientRect().height : 0;
+
+        // Hitung posisi elemen target dari atas dokumen
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerHeight;
+
+        // Eksekusi scroll mulus
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+        });
+
+        // Update URL hash tanpa membuat halaman melompat
+        history.pushState(null, null, targetId);
+    });
+});
+
     fetchGitHubData();
 
     // --- UTILS (Year, Scroll, Spy) ---
