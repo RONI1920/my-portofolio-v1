@@ -270,12 +270,24 @@
         <div class="time-prayer-widget">
           <div class="current-time-box"
             style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-
             <div class="analog-clock">
               <div class="hand hour-hand" id="hour-hand"></div>
               <div class="hand minute-hand" id="minute-hand"></div>
               <div class="hand second-hand" id="second-hand"></div>
               <div class="clock-center"></div>
+            </div>
+
+            <div class="current-time-box">
+              <div class="analog-clock" id="analog-clock-wrapper">
+                <div class="hand hour-hand" id="hour-hand"></div>
+                <div class="hand minute-hand" id="minute-hand"></div>
+                <div class="hand second-hand" id="second-hand"></div>
+                <div class="clock-center"></div>
+              </div>
+
+              <div id="digital-clock" class="digital-clock">00:00:00</div>
+
+              <p id="realtime-date" style="margin-top: 1rem;">Memuat tanggal...</p>
             </div>
 
             <p id="realtime-date" style="margin-top: 1rem;">Memuat tanggal...</p>

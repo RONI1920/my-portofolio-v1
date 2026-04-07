@@ -471,6 +471,43 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
     z-index: 0; /* Pastikan posisinya di bawah jarum jam */
 }
 
+/* Styling Jam Digital */
+.digital-clock {
+    display: none; /* Sembunyikan di desktop */
+    font-size: 3rem;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace; /* Gaya digital */
+    color: var(--text);
+    letter-spacing: 2px;
+}
+
+/* RESPONSIVE: Mobile Mode (max-width: 650px) */
+@media (max-width: 650px) {
+    .time-prayer-widget {
+        flex-direction: column; /* Widget jadi vertikal di mobile */
+        padding: 1.5rem;
+    }
+
+    .current-time-box {
+        border-right: none;
+        border-bottom: 1px solid var(--border); /* Garis pindah ke bawah */
+        padding-right: 0;
+        margin-right: 0;
+        padding-bottom: 2rem;
+        margin-bottom: 2rem;
+        width: 100%;
+    }
+
+    /* SEMBUNYIKAN ANALOG, TAMPILKAN DIGITAL */
+    .analog-clock {
+        display: none;
+    }
+
+    .digital-clock {
+        display: block;
+    }
+}
+
 /* RESPONSIVE */
 @media (max-width: 650px) {
     .section { scroll-margin-top: 120px; }

@@ -196,18 +196,27 @@
 function updateClock() {
     const now = new Date();
 
-    // Ambil waktu saat ini
+    // 1. AMBIL WAKTU SAAT INI
     const seconds = now.getSeconds();
     const minutes = now.getMinutes();
     const hours = now.getHours();
 
-    // Hitung derajat putaran jarum (360 derajat = 1 putaran penuh)
-    // Jarum menit dan jam ditambahkan hitungan ekstra agar bergeraknya sangat mulus
+    // 2. LOGIKA JAM DIGITAL (Untuk Tampilan Mobile)
+    // Menggunakan padStart agar tetap 2 digit (contoh: 09:05:01)
+    const displayHours = String(hours).padStart(2, '0');
+    const displayMinutes = String(minutes).padStart(2, '0');
+    const displaySeconds = String(seconds).padStart(2, '0');
+
+    const digitalEl = document.getElementById('digital-clock');
+    if (digitalEl) {
+        digitalEl.textContent = `${displayHours}:${displayMinutes}:${displaySeconds}`;
+    }
+
+    // 3. LOGIKA JAM ANALOG (Derajat Putaran)
     const secDeg = (seconds / 60) * 360;
     const minDeg = ((minutes / 60) * 360) + ((seconds / 60) * 6);
     const hourDeg = ((hours % 12) / 12) * 360 + ((minutes / 60) * 30);
 
-    // Putar elemen CSS-nya menggunakan transform
     const secHand = document.getElementById('second-hand');
     const minHand = document.getElementById('minute-hand');
     const hourHand = document.getElementById('hour-hand');
@@ -216,11 +225,19 @@ function updateClock() {
     if (minHand) minHand.style.transform = `rotate(${minDeg}deg)`;
     if (hourHand) hourHand.style.transform = `rotate(${hourDeg}deg)`;
 
-    // Update Tanggal
+    // 4. UPDATE TANGGAL
     const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const dateEl = document.getElementById('realtime-date');
-    if (dateEl) dateEl.textContent = now.toLocaleDateString('id-ID', dateOptions);
+    if (dateEl) {
+        dateEl.textContent = now.toLocaleDateString('id-ID', dateOptions);
+    }
 }
+
+// Jalankan setiap detik
+setInterval(updateClock, 1000);
+// Panggil sekali di awal agar tidak menunggu 1 detik pertama
+updateClock();
+
 
 // ==========================================
 // FUNGSI MEMBUAT ANGKA 1-12 DI JAM ANALOG
