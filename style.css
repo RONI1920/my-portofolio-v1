@@ -170,7 +170,7 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
 
 /* SECTIONS */
-.section { padding: 4rem 0; scroll-margin-top: 145px; }
+.section { padding: 4rem 0; scroll-margin-top: 80px; }
 .section-grid {
     display: grid; grid-template-columns: 180px 1fr;
     gap: 2rem 3rem; align-items: start;
@@ -312,6 +312,7 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
 
 /* RESPONSIVE */
 @media (max-width: 650px) {
+    .section { scroll-margin-top: 120px; }
     .section-grid { grid-template-columns: 1fr; gap: 1rem; }
     .section-label { display: flex; align-items: center; gap: 0.75rem; }
     .section-label span { margin-bottom: 0; }
