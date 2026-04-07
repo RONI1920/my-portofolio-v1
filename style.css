@@ -272,7 +272,12 @@ transform: translateY(-5px);
 .timeline-body p { font-size: 0.93rem; color: var(--text-muted); margin-bottom: 0; }
 
 /* CONTACT */
-#contact { min-height: calc(100vh - 80px); }
+#contact {
+    min-height: calc(100vh - 150px); 
+    display: flex; 
+    align-items: center; 
+    padding-top: 0; 
+    padding-bottom: 0;}
 .contact-list { display: flex; flex-direction: column; }
 .contact-item {
     display: flex; align-items: baseline; gap: 1.5rem;
