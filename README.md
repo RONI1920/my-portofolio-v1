@@ -14,7 +14,7 @@ Website portfolio pribadi untuk menampilkan profil, skill, dan project IT yang s
 * **Inventory Management System:** Sistem stok berbasis Laravel.
 
 ## 🔗 Links
-* **Domain:** [ronniehidayat.my.id](http://ronihidayat.my.id)
+* **Domain:** [ronihidayat.my.id](http://ronihidayat.my.id)
 
 ---
 *Transforming from F&B Professional to IT Specialist.*
