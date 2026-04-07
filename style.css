@@ -170,35 +170,65 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 
 
 
-/* Layout Hero Jadi 2 Kolom */
+/* Container Utama Hero */
 .hero-inner {
     display: flex;
+    flex-direction: row; /* Default: Berdampingan */
     align-items: center;
     justify-content: space-between;
-    gap: 3rem;
+    gap: 2rem;
+    width: 100%;
 }
 
+/* Mengatur proporsi teks (60%) */
 .hero-content {
-    flex: 1; /* Teks mengambil ruang yang tersedia */
+    flex: 0 0 60%; 
+    min-width: 300px; /* Biar teks gak kekecilan banget */
 }
 
+/* Mengatur proporsi gambar (40%) */
 .hero-image {
-    flex: 1;
+    flex: 0 0 40%;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .hero-image img {
-    width: 67%;
-    max-width: 450px; /* Atur ukuran maksimal foto kamu */
+    width: 100%;
+    max-width: 400px;
     height: auto;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); /* Biar ada efek bayangan halus */
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.15));
+    object-fit: contain;
+}
+
+/* --- RESPONSIVE MODE (MOBILE & TABLET) --- */
+@media (max-width: 850px) {
+    .hero-inner {
+        flex-direction: column-reverse;
+        text-align: center;
+        gap: 3rem;
+    }
+
+    .hero-content, .hero-image {
+        flex: 0 0 100%;
+        width: 100%;
+    }
+
+    .hero-image img {
+        width: 70%;
+        max-width: 280px;
+    }
+
+    .hero-cta {
+        justify-content: center;
+    }
 }
 
 /* RESPONSIVE: Di HP, foto pindah ke atas teks */
 @media (max-width: 768px) {
     .hero-inner {
-        flex-direction: column-reverse; /* Foto di atas, teks di bawah */
+        flex-direction: column-reverse; 
         text-align: center;
         gap: 2rem;
     }
@@ -208,7 +238,7 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
     }
 
     .hero-image img {
-        max-width: 250px; /* Perkecil foto di layar HP */
+        max-width: 250px;
     }
 }
 
