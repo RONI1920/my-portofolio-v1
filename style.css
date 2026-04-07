@@ -189,7 +189,7 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 }
 
 .hero-image img {
-    width: 75%;
+    width: 67%;
     max-width: 450px; /* Atur ukuran maksimal foto kamu */
     height: auto;
     filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); /* Biar ada efek bayangan halus */
