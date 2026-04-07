@@ -168,6 +168,50 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 
 .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
 
+
+
+/* Layout Hero Jadi 2 Kolom */
+.hero-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+}
+
+.hero-content {
+    flex: 1; /* Teks mengambil ruang yang tersedia */
+}
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image img {
+    width: 75%;
+    max-width: 450px; /* Atur ukuran maksimal foto kamu */
+    height: auto;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); /* Biar ada efek bayangan halus */
+}
+
+/* RESPONSIVE: Di HP, foto pindah ke atas teks */
+@media (max-width: 768px) {
+    .hero-inner {
+        flex-direction: column-reverse; /* Foto di atas, teks di bawah */
+        text-align: center;
+        gap: 2rem;
+    }
+    
+    .hero-cta {
+        justify-content: center;
+    }
+
+    .hero-image img {
+        max-width: 250px; /* Perkecil foto di layar HP */
+    }
+}
+
 /* SECTIONS */
 .section { padding: 4rem 0;}
 .section-grid {
