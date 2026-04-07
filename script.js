@@ -12,21 +12,28 @@
     const themeIcon = document.getElementById('theme-icon');
 
     function applyTheme(theme) {
+        // Ini yang membuat CSS kamu bekerja!
         html.setAttribute('data-theme', theme);
         localStorage.setItem('portfolio-theme', theme);
-        themeIcon.textContent = theme === 'dark' ? '☀' : '☾';
+
+        if (themeIcon) {
+            themeIcon.textContent = theme === 'dark' ? '☀' : '☾';
+        }
     }
 
-    function getInitialTheme() {
-        const saved = localStorage.getItem('portfolio-theme');
-        if (saved === 'dark' || saved === 'light') return saved;
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
+    // Jalankan saat halaman pertama kali dibuka
+    const savedTheme = localStorage.getItem('portfolio-theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
-    applyTheme(getInitialTheme());
-    toggleBtn.addEventListener('click', function () {
-        applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-    });
+    applyTheme(savedTheme);
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        });
+    }
 
     // ── GITHUB DATA LOGIC WITH CACHING ────────────────────────
     const repoGrid = document.getElementById('repo-grid');
@@ -74,7 +81,7 @@
             console.log("Mengambil data baru dari GitHub API...");
             const [userRes, repoRes] = await Promise.all([
                 fetch(`https://api.github.com/users/${GITHUB_USERNAME}`),
-                fetch(`https://api.api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=9`)
+                fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=9`)
             ]);
 
             if (userRes.status === 403 || repoRes.status === 403) {
