@@ -126,36 +126,36 @@
     }
 
     // --- SMOOTH SCROLL DENGAN JARAK HEADER DINAMIS ---
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        // Abaikan jika href hanya "#" (biasanya untuk back-to-top)
-        if (this.getAttribute('href') === '#') return;
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            // Abaikan jika href hanya "#" (biasanya untuk back-to-top)
+            if (this.getAttribute('href') === '#') return;
 
-        const targetId = this.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
 
-        if (!targetElement) return;
+            if (!targetElement) return;
 
-        e.preventDefault();
+            e.preventDefault();
 
-        // Ambil tinggi header saat ini (otomatis menyesuaikan HP/Desktop)
-        const header = document.querySelector('header');
-        const headerHeight = header ? header.getBoundingClientRect().height : 0;
+            // Ambil tinggi header saat ini (otomatis menyesuaikan HP/Desktop)
+            const header = document.querySelector('header');
+            const headerHeight = header ? header.getBoundingClientRect().height : 0;
 
-        // Hitung posisi elemen target dari atas dokumen
-        const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.scrollY - headerHeight;
+            // Hitung posisi elemen target dari atas dokumen
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.scrollY - headerHeight;
 
-        // Eksekusi scroll mulus
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth"
+            // Eksekusi scroll mulus
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+
+            // Update URL hash tanpa membuat halaman melompat
+            history.pushState(null, null, targetId);
         });
-
-        // Update URL hash tanpa membuat halaman melompat
-        history.pushState(null, null, targetId);
     });
-});
 
     fetchGitHubData();
 
@@ -190,57 +190,120 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 })();
 
-// --- PRAYER TIMES API (Aladhan) DENGAN CACHE ---
-    async function fetchPrayerTimes() {
-        const prayerListEl = document.getElementById('prayer-list');
-        
-        // Buat kunci unik berdasarkan tanggal hari ini (Contoh: "2026-04-08")
-        const today = new Date().toISOString().split('T')[0];
-        const CACHE_KEY = 'jadwal_shalat_data';
-        const DATE_KEY = 'jadwal_shalat_tanggal';
+// ==========================================
+// 1. FUNGSI JAM REAL-TIME (VERSI ANALOG)
+// ==========================================
+function updateClock() {
+    const now = new Date();
 
-        // 1. CEK CACHE: Jika tanggal hari ini sama dengan yang disimpan, pakai data lokal!
-        if (localStorage.getItem(DATE_KEY) === today && localStorage.getItem(CACHE_KEY)) {
-            const cachedPrayers = JSON.parse(localStorage.getItem(CACHE_KEY));
-            renderPrayers(cachedPrayers, prayerListEl);
-            return; // Hentikan fungsi di sini, tidak perlu memanggil API lagi
-        }
+    // Ambil waktu saat ini
+    const seconds = now.getSeconds();
+    const minutes = now.getMinutes();
+    const hours = now.getHours();
 
-        // 2. JIKA TIDAK ADA CACHE / GANTI HARI: Baru ambil dari server Aladhan
-        const apiUrl = 'https://api.aladhan.com/v1/timingsByCity?city=Jakarta&country=Indonesia&method=11';
+    // Hitung derajat putaran jarum (360 derajat = 1 putaran penuh)
+    // Jarum menit dan jam ditambahkan hitungan ekstra agar bergeraknya sangat mulus
+    const secDeg = (seconds / 60) * 360;
+    const minDeg = ((minutes / 60) * 360) + ((seconds / 60) * 6);
+    const hourDeg = ((hours % 12) / 12) * 360 + ((minutes / 60) * 30);
 
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) throw new Error("Gagal mengambil data API");
-            
-            const data = await response.json();
-            const timings = data.data.timings;
+    // Putar elemen CSS-nya menggunakan transform
+    const secHand = document.getElementById('second-hand');
+    const minHand = document.getElementById('minute-hand');
+    const hourHand = document.getElementById('hour-hand');
 
-// 1. Update daftar array ini untuk menambahkan properti 'icon'
-            const prayers = [
-                { name: 'Subuh', time: timings.Fajr, icon: 'fa-person-praying' }, // Ikon orang sujud
-                { name: 'Dzuhur', time: timings.Dhuhr, icon: 'fa-sun' },           // Ikon matahari siang
-                { name: 'Ashar', time: timings.Asr, icon: 'fa-cloud-sun' },        // Ikon matahari berawan
-                { name: 'Maghrib', time: timings.Maghrib, icon: 'fa-moon' },       // Ikon bulan
-                { name: 'Isya', time: timings.Isha, icon: 'fa-star-and-crescent'}  // Ikon bulan bintang Islam
-            ];
+    if (secHand) secHand.style.transform = `rotate(${secDeg}deg)`;
+    if (minHand) minHand.style.transform = `rotate(${minDeg}deg)`;
+    if (hourHand) hourHand.style.transform = `rotate(${hourDeg}deg)`;
 
-            // 3. SIMPAN KE CACHE: Simpan tanggal dan data jadwal ke browser pengguna
-            localStorage.setItem(DATE_KEY, today);
-            localStorage.setItem(CACHE_KEY, JSON.stringify(prayers));
+    // Update Tanggal
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateEl = document.getElementById('realtime-date');
+    if (dateEl) dateEl.textContent = now.toLocaleDateString('id-ID', dateOptions);
+}
 
-            // Tampilkan ke layar
-            renderPrayers(prayers, prayerListEl);
+// ==========================================
+// FUNGSI MEMBUAT ANGKA 1-12 DI JAM ANALOG
+// ==========================================
+function createClockNumbers() {
+    const clock = document.querySelector('.analog-clock');
+    if (!clock) return; // Cegah error jika jam tidak ditemukan
 
-        } catch (error) {
-            prayerListEl.innerHTML = `<li style="color: #b94a3a;">Gagal memuat jadwal shalat.</li>`;
-            console.error(error);
-        }
+    for (let i = 1; i <= 12; i++) {
+        const numberDiv = document.createElement('div');
+        numberDiv.className = 'clock-number';
+        numberDiv.textContent = i;
+
+        // Rumus sakti: 
+        // 1. Putar ke arah jam (misal jam 1 = 30 derajat)
+        // 2. Dorong ke pinggir sejauh 44px
+        // 3. Putar balik teksnya agar posisinya tetap tegak berdiri
+        numberDiv.style.transform = `rotate(${i * 30}deg) translate(0, -44px) rotate(-${i * 30}deg)`;
+
+        clock.appendChild(numberDiv);
+    }
+}
+
+// Panggil fungsi ini SATU KALI saja saat web dimuat
+createClockNumbers();
+
+// Jalankan jam setiap 1 detik
+setInterval(updateClock, 1000);
+updateClock(); // Panggil saat web baru dibuka
+
+// ==========================================
+// 2. FUNGSI JADWAL SHALAT (DENGAN CACHE & IKON)
+// ==========================================
+async function fetchPrayerTimes() {
+    const prayerListEl = document.getElementById('prayer-list');
+    if (!prayerListEl) return;
+
+    // Buat kunci unik berdasarkan tanggal hari ini (Contoh: "2026-04-08")
+    const today = new Date().toISOString().split('T')[0];
+    const CACHE_KEY = 'jadwal_shalat_data';
+    const DATE_KEY = 'jadwal_shalat_tanggal';
+
+    // CEK CACHE: Jika tanggal hari ini sama dengan yang disimpan, pakai data lokal!
+    if (localStorage.getItem(DATE_KEY) === today && localStorage.getItem(CACHE_KEY)) {
+        const cachedPrayers = JSON.parse(localStorage.getItem(CACHE_KEY));
+        renderPrayers(cachedPrayers, prayerListEl);
+        return; // Hentikan fungsi di sini, tidak perlu memanggil API lagi
     }
 
-// 2. Update fungsi render ini untuk memasukkan struktur HTML yang baru
-    function renderPrayers(prayers, container) {
-        container.innerHTML = prayers.map(p => `
+    // JIKA TIDAK ADA CACHE / GANTI HARI: Baru ambil dari server Aladhan
+    const apiUrl = 'https://api.aladhan.com/v1/timingsByCity?city=Jakarta&country=Indonesia&method=11';
+
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Gagal mengambil data API");
+
+        const data = await response.json();
+        const timings = data.data.timings;
+
+        // Daftar shalat beserta ikonnya
+        const prayers = [
+            { name: 'Subuh', time: timings.Fajr, icon: 'fa-person-praying' },
+            { name: 'Dzuhur', time: timings.Dhuhr, icon: 'fa-sun' },
+            { name: 'Ashar', time: timings.Asr, icon: 'fa-cloud-sun' },
+            { name: 'Maghrib', time: timings.Maghrib, icon: 'fa-moon' },
+            { name: 'Isya', time: timings.Isha, icon: 'fa-star-and-crescent' }
+        ];
+
+        // SIMPAN KE CACHE
+        localStorage.setItem(DATE_KEY, today);
+        localStorage.setItem(CACHE_KEY, JSON.stringify(prayers));
+
+        // Tampilkan ke layar
+        renderPrayers(prayers, prayerListEl);
+
+    } catch (error) {
+        prayerListEl.innerHTML = `<li style="color: #b94a3a;">Gagal memuat jadwal shalat.</li>`;
+        console.error(error);
+    }
+}
+
+function renderPrayers(prayers, container) {
+    container.innerHTML = prayers.map(p => `
             <li class="prayer-item">
                 <div class="prayer-info">
                     <i class="fa-solid ${p.icon} prayer-icon"></i>
@@ -249,7 +312,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 <span class="prayer-time">${p.time}</span>
             </li>
         `).join('');
-    }
+}
 
-    // Panggil fungsinya
-    fetchPrayerTimes();
+// Panggil fungsi jadwal shalat
+fetchPrayerTimes();
+

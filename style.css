@@ -366,6 +366,111 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
     color: var(--text);
 }
 
+/* PENGATURAN LAYOUT CONTACT & WIDGET */
+.contact-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem; /* Jarak antara Widget dan tulisan Contact */
+}
+
+/* DESAIN KOTAK WIDGET (JAM KIRI, JADWAL KANAN) */
+.time-prayer-widget {
+    display: flex;
+    flex-direction: row; 
+    align-items: center; 
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2.5rem;
+    width: 100%;
+}
+
+.current-time-box {
+    flex: 0 0 auto; 
+    border-right: 1px solid var(--border);
+    padding-right: 3rem;
+    margin-right: 3rem;
+}
+
+.prayer-times-box {
+    flex: 1; 
+}
+
+/* DESAIN JAM ANALOG */
+.analog-clock {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border: 4px solid var(--border);
+    border-radius: 50%;
+    background-color: var(--bg);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.05); /* Sedikit bayangan di dalam */
+}
+
+/* Pengaturan dasar semua jarum jam */
+.hand {
+    position: absolute;
+    bottom: 50%; /* Titik putarnya ada di tengah jam */
+    transform-origin: bottom center; /* Memastikan jarum berputar dari pangkalnya, bukan tengahnya */
+    border-radius: 4px;
+    /* transition: transform 0.1s cubic-bezier(0.4, 2.08, 0.55, 0.44); Opsional: Efek detak memantul */
+}
+
+/* Ukuran masing-masing jarum */
+.hour-hand { 
+    width: 6px; 
+    height: 35px; 
+    left: 53px; /* (120/2) - (6/2) - 4px border */
+    background-color: var(--text); 
+    z-index: 1;
+}
+
+.minute-hand { 
+    width: 4px; 
+    height: 45px; 
+    left: 54px; 
+    background-color: var(--text-muted); 
+    z-index: 2;
+}
+
+.second-hand { 
+    width: 2px; 
+    height: 50px; 
+    left: 55px; 
+    background-color: var(--accent); /* Menggunakan warna biru/tema Anda */
+    z-index: 3;
+}
+
+/* Titik tengah jam */
+.clock-center {
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    width: 12px; 
+    height: 12px;
+    background-color: var(--accent);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+}
+
+/* ANGKA JAM ANALOG */
+.clock-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px; /* Menarik ke titik tengah persis */
+    margin-left: -10px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--text-muted);
+    z-index: 0; /* Pastikan posisinya di bawah jarum jam */
+}
+
 /* RESPONSIVE */
 @media (max-width: 650px) {
     .section { scroll-margin-top: 120px; }
