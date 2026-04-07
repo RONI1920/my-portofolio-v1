@@ -169,67 +169,70 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
 
 
-/* --- HERO LAYOUT --- */
+
+/* Container utama Hero */
 .hero {
-    padding: 5rem 0;
-    overflow: hidden;
+    padding: 4rem 0;
+    background-color: var(--bg);
 }
 
-.hero-inner {
+/* Kunci agar selalu baris (row) dan tidak boleh bungkus (no-wrap) */
+.hero-flex-layout {
     display: flex;
+    flex-direction: row; 
+    flex-wrap: nowrap; /* INI KUNCINYA: Melarang elemen turun ke bawah */
     align-items: center;
     justify-content: space-between;
-    gap: 4rem; /* Jarak antara teks dan foto */
-}
-
-.hero-content {
-    flex: 1;
-    max-width: 600px;
-}
-
-.hero-image {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end; /* Foto mepet ke kanan di web */
-}
-
-.hero-image img {
+    gap: 2rem;
     width: 100%;
-    max-width: 420px; /* Ukuran foto di web */
+}
+
+/* Sisi Teks (Mengambil sisa ruang yang ada) */
+.hero-text-side {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+/* Sisi Foto (Dikunci lebarnya agar tetap di samping) */
+.hero-image-side {
+    flex: 0 0 35%;
+    max-width: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-image-side img {
+    width: 100%;
+    max-width: 100%;
     height: auto;
-    filter: drop-shadow(0 15px 35px rgba(0,0,0,0.15));
-    transition: transform 0.3s ease;
+    object-fit: contain;
+    display: block;
 }
 
-.hero-image img:hover {
-    transform: translateY(-10px); /* Efek melayang dikit pas di-hover */
-}
-
-/* --- RESPONSIVE (MOBILE & TABLET) --- */
-@media (max-width: 850px) {
-    .hero-inner {
-        flex-direction: column-reverse; /* Foto di ATAS, teks di BAWAH */
-        text-align: center;
-        gap: 2.5rem;
+/* Penyesuaian khusus untuk Mobile (Layar sangat kecil) */
+@media (max-width: 600px) {
+    .hero-flex-layout {
+        gap: 0.75rem;
+        align-items: flex-start;
     }
-
-    .hero-content {
-        max-width: 100%;
+    .hero-image-side {
+        flex: 0 0 38%;
+        max-width: 38%;
     }
-
-    .hero-image {
-        justify-content: center; /* Foto di tengah pas mobile */
-    }
-
-    .hero-image img {
-        max-width: 280px; /* Ukuran foto di HP diperkecil */
-    }
-
+    
     .hero-cta {
-        justify-content: center; /* Tombol pindah ke tengah */
+        display: flex;
+        flex-direction: column; /* Tombol jadi atas-bawah agar tidak tabrakan dengan foto */
+        gap: 0.5rem;
+    }
+
+    .btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+        text-align: center;
     }
 }
-
 
 /* SECTIONS */
 .section { padding: 4rem 0;}
