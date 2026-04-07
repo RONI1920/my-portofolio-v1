@@ -170,7 +170,7 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
 
 /* SECTIONS */
-.section { padding: 4rem 0; scroll-margin-top: 80px; }
+.section { padding: 4rem 0; scroll-margin-top: 145px; }
 .section-grid {
     display: grid; grid-template-columns: 180px 1fr;
     gap: 2rem 3rem; align-items: start;
