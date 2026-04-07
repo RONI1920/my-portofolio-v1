@@ -119,15 +119,15 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
     display: none;
     overflow: hidden;
     max-height: 0;
-    width: 100%; /* FIX 1: Memaksa menu mengambil lebar penuh dan turun ke baris baru */
+    width: 100%; 
     transition: max-height 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
     background-color: var(--bg);
-    border-top: 1px solid transparent; /* FIX 2: Sembunyikan garis saat tertutup */
+    border-top: 1px solid transparent;
 }
 .mobile-menu.open {
     max-height: 320px;
     padding: 0.75rem 0 1rem;
-    border-top-color: var(--border); /* FIX 3: Munculkan garis pembatas hanya saat terbuka */
+    border-top-color: var(--border);
 }
 .mobile-nav-links {
     list-style: none;
