@@ -170,75 +170,73 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 
 
 
-/* Container Utama Hero */
-.hero-inner {
+/* Container utama Hero */
+.hero {
+    padding: 4rem 0;
+    background-color: var(--bg);
+}
+
+/* Kunci agar selalu baris (row) dan tidak boleh bungkus (no-wrap) */
+.hero-flex-layout {
     display: flex;
-    flex-direction: row; /* Default: Berdampingan */
+    flex-direction: row; 
+    flex-wrap: nowrap; /* INI KUNCINYA: Melarang elemen turun ke bawah */
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
     width: 100%;
 }
 
-/* Mengatur proporsi teks (60%) */
-.hero-content {
-    flex: 0 0 60%; 
-    min-width: 300px; /* Biar teks gak kekecilan banget */
+/* Sisi Teks (Mengambil sisa ruang yang ada) */
+.hero-text-side {
+    flex: 1;
+    min-width: 0; /* Mencegah teks memaksa lebar dan mendorong foto keluar */
 }
 
-/* Mengatur proporsi gambar (40%) */
-.hero-image {
-    flex: 0 0 40%;
+/* Sisi Foto (Dikunci lebarnya agar tetap di samping) */
+.hero-image-side {
+    flex: 0 0 35%; /* Foto selalu memakan 35% lebar layar */
     display: flex;
     justify-content: center;
-    align-items: center;
 }
 
-.hero-image img {
+.hero-image-side img {
     width: 100%;
-    max-width: 400px;
+    max-width: 350px; /* Ukuran maksimal foto di layar besar */
     height: auto;
-    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.15));
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
     object-fit: contain;
 }
 
-/* --- RESPONSIVE MODE (MOBILE & TABLET) --- */
-@media (max-width: 850px) {
-    .hero-inner {
-        flex-direction: column-reverse;
-        text-align: center;
-        gap: 3rem;
+/* Penyesuaian khusus untuk Mobile (Layar sangat kecil) */
+@media (max-width: 600px) {
+    .hero-flex-layout {
+        gap: 1rem; /* Perkecil jarak agar muat di HP */
     }
 
-    .hero-content, .hero-image {
-        flex: 0 0 100%;
-        width: 100%;
+    .hero-name {
+        font-size: 1.8rem !important; /* Kecilkan sedikit nama agar tidak pecah baris */
     }
 
-    .hero-image img {
-        width: 70%;
-        max-width: 280px;
+    .hero-desc {
+        font-size: 0.85rem; /* Kecilkan teks deskripsi agar tidak terlalu panjang */
+        line-height: 1.4;
     }
 
-    .hero-cta {
-        justify-content: center;
-    }
-}
-
-/* RESPONSIVE: Di HP, foto pindah ke atas teks */
-@media (max-width: 768px) {
-    .hero-inner {
-        flex-direction: column-reverse; 
-        text-align: center;
-        gap: 2rem;
+    .hero-image-side {
+        flex: 0 0 40%; /* Di HP, foto boleh sedikit lebih besar (40%) */
     }
     
     .hero-cta {
-        justify-content: center;
+        display: flex;
+        flex-direction: column; /* Tombol jadi atas-bawah agar tidak tabrakan dengan foto */
+        gap: 0.5rem;
     }
 
-    .hero-image img {
-        max-width: 250px;
+    .btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+        text-align: center;
     }
 }
 
