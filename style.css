@@ -471,15 +471,40 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
     z-index: 0; /* Pastikan posisinya di bawah jarum jam */
 }
 
-/* Styling Jam Digital */
+/* --- TAMPILAN DESKTOP (DEFAULT) --- */
 .digital-clock {
-    display: none; /* Sembunyikan di desktop */
-    font-size: 3rem;
+    display: none; /* Sembunyikan digital di desktop */
+    font-size: 2.5rem;
     font-weight: bold;
-    font-family: 'Courier New', Courier, monospace; /* Gaya digital */
+    font-family: 'Courier New', Courier, monospace;
     color: var(--text);
-    letter-spacing: 2px;
+    margin: 1rem 0;
 }
+
+.analog-clock {
+    display: block; /* Tampilkan analog di desktop */
+}
+
+/* --- TAMPILAN MOBILE (MAX-WIDTH: 650PX) --- */
+@media (max-width: 650px) {
+    .analog-clock {
+        display: none !important; /* Hilangkan analog total di HP */
+    }
+
+    .digital-clock {
+        display: block !important; /* Paksa munculkan digital di HP */
+    }
+    
+    .current-time-box {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding-right: 0;
+        margin-right: 0;
+        padding-bottom: 2rem;
+        margin-bottom: 2rem;
+    }
+}
+
 
 /* RESPONSIVE: Mobile Mode (max-width: 650px) */
 @media (max-width: 650px) {
@@ -496,15 +521,6 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
         padding-bottom: 2rem;
         margin-bottom: 2rem;
         width: 100%;
-    }
-
-    /* SEMBUNYIKAN ANALOG, TAMPILKAN DIGITAL */
-    .analog-clock {
-        display: none;
-    }
-
-    .digital-clock {
-        display: block;
     }
 }
 
