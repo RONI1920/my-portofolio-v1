@@ -190,38 +190,32 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 })();
 
-
-// --- REAL-TIME CLOCK ---
-    function updateClock() {
-        const now = new Date();
-        
-        // Format Waktu (HH:MM:SS)
-        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-        document.getElementById('realtime-clock').textContent = now.toLocaleTimeString('id-ID', timeOptions);
-        
-        // Format Tanggal
-        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('realtime-date').textContent = now.toLocaleDateString('id-ID', dateOptions);
-    }
-    
-    // Jalankan jam setiap 1 detik
-    setInterval(updateClock, 1000);
-    updateClock(); // Panggil sekali di awal agar tidak delay 1 detik
-
-    // --- PRAYER TIMES API (Aladhan) ---
+// --- PRAYER TIMES API (Aladhan) DENGAN CACHE ---
     async function fetchPrayerTimes() {
         const prayerListEl = document.getElementById('prayer-list');
-        // Parameter kota disetel ke Jakarta, Indonesia
+        
+        // Buat kunci unik berdasarkan tanggal hari ini (Contoh: "2026-04-08")
+        const today = new Date().toISOString().split('T')[0];
+        const CACHE_KEY = 'jadwal_shalat_data';
+        const DATE_KEY = 'jadwal_shalat_tanggal';
+
+        // 1. CEK CACHE: Jika tanggal hari ini sama dengan yang disimpan, pakai data lokal!
+        if (localStorage.getItem(DATE_KEY) === today && localStorage.getItem(CACHE_KEY)) {
+            const cachedPrayers = JSON.parse(localStorage.getItem(CACHE_KEY));
+            renderPrayers(cachedPrayers, prayerListEl);
+            return; // Hentikan fungsi di sini, tidak perlu memanggil API lagi
+        }
+
+        // 2. JIKA TIDAK ADA CACHE / GANTI HARI: Baru ambil dari server Aladhan
         const apiUrl = 'https://api.aladhan.com/v1/timingsByCity?city=Jakarta&country=Indonesia&method=11';
 
         try {
             const response = await fetch(apiUrl);
-            if (!response.ok) throw new Error("Yah... Gagal mengambil data API");
+            if (!response.ok) throw new Error("Gagal mengambil data API");
             
             const data = await response.json();
             const timings = data.data.timings;
 
-            // Pilih waktu shalat yang ingin ditampilkan
             const prayers = [
                 { name: 'Subuh', time: timings.Fajr },
                 { name: 'Dzuhur', time: timings.Dhuhr },
@@ -230,19 +224,28 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 { name: 'Isya', time: timings.Isha }
             ];
 
-            // Render ke HTML
-            prayerListEl.innerHTML = prayers.map(p => `
-                <li class="prayer-item">
-                    <span class="prayer-name">${p.name}</span>
-                    <span class="prayer-time">${p.time}</span>
-                </li>
-            `).join('');
+            // 3. SIMPAN KE CACHE: Simpan tanggal dan data jadwal ke browser pengguna
+            localStorage.setItem(DATE_KEY, today);
+            localStorage.setItem(CACHE_KEY, JSON.stringify(prayers));
+
+            // Tampilkan ke layar
+            renderPrayers(prayers, prayerListEl);
 
         } catch (error) {
-            prayerListEl.innerHTML = `<li style="color: #b94a3a;">Yah... Gagal memuat jadwal shalat.</li>`;
+            prayerListEl.innerHTML = `<li style="color: #b94a3a;">Gagal memuat jadwal shalat.</li>`;
             console.error(error);
         }
     }
 
-    // Panggil fungsi API
+    // Fungsi kecil untuk menampilkan HTML agar kode lebih rapi
+    function renderPrayers(prayers, container) {
+        container.innerHTML = prayers.map(p => `
+            <li class="prayer-item">
+                <span class="prayer-name">${p.name}</span>
+                <span class="prayer-time">${p.time}</span>
+            </li>
+        `).join('');
+    }
+
+    // Panggil fungsinya
     fetchPrayerTimes();
