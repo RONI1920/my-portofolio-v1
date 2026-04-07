@@ -17,18 +17,37 @@
         <span class="logo-title">— Developer</span>
       </div>
       <nav>
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-links">
           <li><a href="#about">About</a></li>
           <li><a href="#skills">Skills</a></li>
           <li><a href="#projects">Projects</a></li>
           <li><a href="#experience">Experience</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
-        <button id="theme-toggle">
-          <span id="theme-icon">☾</span>
-        </button>
+        <div class="nav-controls">
+          <button id="theme-toggle" aria-label="Toggle theme">
+            <span id="theme-icon">☾</span>
+          </button>
+          <button id="hamburger" aria-label="Open menu" aria-expanded="false">
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+          </button>
+        </div>
       </nav>
+      <!-- Mobile drawer -->
+      <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+        <ul class="mobile-nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
     </div>
+
+
   </header>
 
   <main>

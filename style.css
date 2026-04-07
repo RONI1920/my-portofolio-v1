@@ -91,6 +91,60 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
     border-radius: 4px; transition: border-color 0.2s, background-color 0.2s;
     flex-shrink: 0;
 }
+
+ 
+/* Nav controls wrapper */
+.nav-controls { display: flex; align-items: center; gap: 0.5rem; }
+ 
+/* Hamburger button */
+#hamburger {
+    display: none;
+    flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+    background: none; border: 1px solid var(--border); cursor: pointer;
+    width: 2rem; height: 2rem; border-radius: 4px; padding: 5px;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+#hamburger:hover { background-color: var(--bg-card); }
+.ham-line {
+    display: block; width: 16px; height: 2px;
+    background-color: var(--text); border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+#hamburger.open .ham-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+#hamburger.open .ham-line:nth-child(2) { opacity: 0; }
+#hamburger.open .ham-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+ 
+/* Mobile drawer */
+.mobile-menu {
+    display: none;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    background-color: var(--bg);
+    border-top: 1px solid var(--border);
+}
+.mobile-menu.open {
+    max-height: 320px;
+    padding: 0.75rem 0 1rem;
+}
+.mobile-nav-links {
+    list-style: none;
+    display: flex; flex-direction: column;
+}
+.mobile-nav-links li a {
+    display: block;
+    padding: 0.65rem 1.5rem;
+    font-size: 1rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s, background-color 0.2s;
+}
+.mobile-nav-links li a:hover {
+    color: var(--text);
+    background-color: var(--bg-card);
+}
+
 #theme-toggle:hover { background-color: var(--bg-card); }
 
 /* HERO */
@@ -243,8 +297,20 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
     .section-label { display: flex; align-items: center; gap: 0.75rem; }
     .section-label span { margin-bottom: 0; }
     .timeline-item { grid-template-columns: 1fr; gap: 0.4rem; }
-    .nav-links { display: none; }
+    
+    /* Navigasi Desktop Sembunyi */
+    .nav-links { display: none; } 
+    
+    /* Munculkan Tombol Hamburger */
+    #hamburger { display: flex; } 
+    
+    /* Munculkan Mobile Drawer Container */
+    .mobile-menu { display: block; }
+
     .hero { padding: 3rem 0 2.5rem; }
     .about-facts { gap: 1.5rem; }
     .project-header { flex-direction: column; }
+    
+    /* Agar header tidak terlalu lebar di HP */
+    .logo-title { display: none; } 
 }
