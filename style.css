@@ -315,6 +315,102 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
 .back-top { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
 .back-top:hover { color: var(--text); text-decoration: none; }
 
+
+/* WIDGET JAM & PRAYER TIMES */
+.time-prayer-widget {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.current-time-box {
+    flex: 1;
+    min-width: 200px;
+    border-right: 1px solid var(--border);
+    padding-right: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#realtime-clock {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--accent);
+    line-height: 1.2;
+    margin-bottom: 0.2rem;
+}
+
+#realtime-date {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.prayer-times-box {
+    flex: 2;
+    min-width: 250px;
+}
+
+.prayer-times-box h4 {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.prayer-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.prayer-item {
+    flex: 1;
+    min-width: 60px;
+    background-color: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.6rem;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.prayer-name {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+}
+
+.prayer-time {
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text);
+}
+
+/* Penyesuaian untuk HP */
+@media (max-width: 650px) {
+    .current-time-box {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding-right: 0;
+        padding-bottom: 1.5rem;
+        text-align: center;
+    }
+    .prayer-times-box h4 {
+        text-align: center;
+    }
+}
+
+
 /* RESPONSIVE */
 @media (max-width: 650px) {
     .section { scroll-margin-top: 120px; }
