@@ -92,10 +92,10 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
     flex-shrink: 0;
 }
 
- 
+
 /* Nav controls wrapper */
 .nav-controls { display: flex; align-items: center; gap: 0.5rem; }
- 
+
 /* Hamburger button */
 #hamburger {
     display: none;
@@ -114,19 +114,21 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 #hamburger.open .ham-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 #hamburger.open .ham-line:nth-child(2) { opacity: 0; }
 #hamburger.open .ham-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
- 
+
 /* Mobile drawer */
 .mobile-menu {
     display: none;
     overflow: hidden;
     max-height: 0;
-    transition: max-height 0.3s ease, padding 0.3s ease;
+    width: 100%; /* FIX 1: Memaksa menu mengambil lebar penuh dan turun ke baris baru */
+    transition: max-height 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
     background-color: var(--bg);
-    border-top: 1px solid var(--border);
+    border-top: 1px solid transparent; /* FIX 2: Sembunyikan garis saat tertutup */
 }
 .mobile-menu.open {
     max-height: 320px;
     padding: 0.75rem 0 1rem;
+    border-top-color: var(--border); /* FIX 3: Munculkan garis pembatas hanya saat terbuka */
 }
 .mobile-nav-links {
     list-style: none;
@@ -277,7 +279,24 @@ transform: translateY(-5px);
     padding: 0.75rem 0; border-bottom: 1px solid var(--border);
 }
 .contact-item:first-child { border-top: 1px solid var(--border); }
-.contact-label { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.05em; min-width: 70px; }
+
+.contact-label { 
+    display: flex;         
+    align-items: center;     
+    gap: 0.5rem;           
+    font-size: 0.85rem; 
+    color: var(--text-muted); 
+    letter-spacing: 0.05em; 
+    min-width: 110px;      
+}
+
+/* Memperbesar ukuran logonya sedikit */
+.contact-label i {
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+
 .contact-value { font-size: 0.95rem; color: var(--accent); }
 .contact-value:hover { color: var(--accent-hover); text-decoration: underline; }
 
