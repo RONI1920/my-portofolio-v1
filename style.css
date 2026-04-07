@@ -213,24 +213,32 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 /* Penyesuaian khusus untuk Mobile (Layar sangat kecil) */
 @media (max-width: 600px) {
     .hero-flex-layout {
-        gap: 0.75rem;
-        align-items: flex-start;
+        flex-direction: column;       
+        align-items: center;
+        gap: 1.5rem;
     }
+
     .hero-image-side {
-        flex: 0 0 38%;
-        max-width: 38%;
+        flex: 0 0 auto;
+        max-width: 60%;              
+        width: 60%;
+        order: -1;                  
     }
-    
+
+    .hero-text-side {
+        width: 100%;
+        text-align: center;            
+    }
+
     .hero-cta {
-        display: flex;
-        flex-direction: column; /* Tombol jadi atas-bawah agar tidak tabrakan dengan foto */
-        gap: 0.5rem;
+        justify-content: center;      
+        flex-direction: row;
+        gap: 0.75rem;
     }
 
     .btn {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.8rem;
-        text-align: center;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
     }
 }
 
