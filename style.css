@@ -274,10 +274,10 @@ flex-direction: column;
 }
 
 .fact-number {
-font-size: 1.5rem;
-font-weight: 700;
-color: var(--accent); /* Menggunakan variabel warna hijau/cyan kamu */
-transition: all 0.3s ease;
+    font-size: clamp(1.2rem, 5vw, 1.8rem); /* Ukuran teks dinamis */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 @media (min-width: 768px) {
@@ -288,8 +288,13 @@ grid-template-columns: repeat(4, 1fr); /* 4 kolom di desktop */
 
 /* Efek pulse kecil saat angka berubah */
 .number-pulse {
-transform: scale(1.1);
-text-shadow: 0 0 10px var(--accent);
+    animation: pulse 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); color: var(--accent); }
+    100% { transform: scale(1); }
 }
 
 /* SKILLS */

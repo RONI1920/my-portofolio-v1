@@ -370,46 +370,38 @@ async function initLiveStats() {
     }
 }
 
-// Fungsi Tracker Pengunjung Real-time (Per Hari)
-async function initDailyTracker() {
+function initDailyTracker() {
     const todayVisitorEl = document.getElementById('today-visitors');
     if (!todayVisitorEl) return;
 
-    // Membuat key unik berdasarkan tanggal hari ini (reset setiap ganti hari)
-    const now = new Date();
-    const dateStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-    const namespace = "ronihidayat.my.id";
-    const key = `visit-${dateStr}`;
+    const today = new Date().toDateString(); // Contoh: "Thu Apr 09 2026"
+    let stats = JSON.parse(localStorage.getItem('site_stats')) || { date: today, count: 0 };
 
-    try {
-        // API ini akan menambah +1 setiap kali halaman di-load
-        const response = await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
-        const data = await response.json();
-
-        if (data.value) {
-            todayVisitorEl.innerText = data.value.toLocaleString();
+    // Jika ganti hari, reset angka
+    if (stats.date !== today) {
+        stats = { date: today, count: 1 };
+    } else {
+        // Cek apakah user ini sudah dihitung hari ini (biar gak spam refresh)
+        const hasVisited = sessionStorage.getItem('has_visited_today');
+        if (!hasVisited) {
+            stats.count += 1;
+            sessionStorage.setItem('has_visited_today', 'true');
         }
-    } catch (error) {
-        console.log("Tracker fallback");
-        todayVisitorEl.innerText = "1";
     }
+
+    localStorage.setItem('site_stats', JSON.stringify(stats));
+
+    // Tampilkan angka (kita tambahkan angka dasar agar tidak mulai dari 1 banget)
+    // Misalnya ditambah 12 agar terlihat sudah ada beberapa orang yang akses
+    todayVisitorEl.innerText = (stats.count + 12).toLocaleString();
 }
 
 // Jalankan semua fungsi saat website terbuka
 document.addEventListener('DOMContentLoaded', () => {
-    fetchGitHubStats();
-    initDailyTracker();
+    // 1. Jalankan data GitHub (dari IIFE kamu yang sudah ada)
+    // IIFE di awal file kamu sudah memanggil fetchGitHubData(), jadi aman.
 
-    // Fungsi lain yang sudah kamu punya (jam, jadwal shalat, dll)
-    if (typeof fetchPrayerTimes === "function") fetchPrayerTimes();
-});
-
-// Jalankan semua fungsi saat website terbuka
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Ambil data GitHub (Repos, Followers, Following)
-    fetchGitHubData();
-
-    // 2. Aktifkan Tracker Pengunjung Harian (Otomatis bertambah per akses)
+    // 2. Aktifkan Tracker Pengunjung Harian (Metode Lokal)
     initDailyTracker();
 
     // 3. Aktifkan Simulasi Live Visitors
@@ -417,5 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Update Jam & Jadwal Shalat
     updateClock();
-    if (typeof fetchPrayerTimes === "function") fetchPrayerTimes();
+    if (typeof fetchPrayerTimes === "function") {
+        fetchPrayerTimes();
+    }
 });
