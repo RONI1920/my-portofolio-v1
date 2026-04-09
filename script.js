@@ -331,6 +331,91 @@ function renderPrayers(prayers, container) {
         `).join('');
 }
 
-// Panggil fungsi jadwal shalat
-fetchPrayerTimes();
+async function initLiveStats() {
+    const visitorEl = document.getElementById('live-visitors');
+    const hitsEl = document.getElementById('total-hits');
 
+    // Gunakan namespace unik, misalnya domain kamu
+    const namespace = "ronihidayat.my.id";
+    const key = "visits";
+
+    try {
+        // 1. Ambil & Tambah data Total Hits secara real
+        const response = await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+        const data = await response.json();
+
+        if (data.value) {
+            hitsEl.innerText = data.value.toLocaleString();
+        }
+
+        // 2. Simulasi Live Visitors (Karena statis tidak punya socket real-time)
+        // Kita buat angka 1-5 agar terlihat ada aktivitas
+        let currentVisitors = Math.floor(Math.random() * 3) + 2;
+        visitorEl.innerText = currentVisitors;
+
+        // Interval untuk membuat angka 'Live' bergerak sedikit
+        setInterval(() => {
+            const change = Math.floor(Math.random() * 3) - 1;
+            currentVisitors = Math.max(1, currentVisitors + change);
+            visitorEl.innerText = currentVisitors;
+
+            visitorEl.classList.add('number-pulse');
+            setTimeout(() => visitorEl.classList.remove('number-pulse'), 300);
+        }, 5000);
+
+    } catch (error) {
+        // Fallback jika API sedang down
+        hitsEl.innerText = "1,240";
+        visitorEl.innerText = "1";
+    }
+}
+
+// Fungsi Tracker Pengunjung Real-time (Per Hari)
+async function initDailyTracker() {
+    const todayVisitorEl = document.getElementById('today-visitors');
+    if (!todayVisitorEl) return;
+
+    // Membuat key unik berdasarkan tanggal hari ini (reset setiap ganti hari)
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+    const namespace = "ronihidayat.my.id";
+    const key = `visit-${dateStr}`;
+
+    try {
+        // API ini akan menambah +1 setiap kali halaman di-load
+        const response = await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+        const data = await response.json();
+
+        if (data.value) {
+            todayVisitorEl.innerText = data.value.toLocaleString();
+        }
+    } catch (error) {
+        console.log("Tracker fallback");
+        todayVisitorEl.innerText = "1";
+    }
+}
+
+// Jalankan semua fungsi saat website terbuka
+document.addEventListener('DOMContentLoaded', () => {
+    fetchGitHubStats();
+    initDailyTracker();
+
+    // Fungsi lain yang sudah kamu punya (jam, jadwal shalat, dll)
+    if (typeof fetchPrayerTimes === "function") fetchPrayerTimes();
+});
+
+// Jalankan semua fungsi saat website terbuka
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Ambil data GitHub (Repos, Followers, Following)
+    fetchGitHubData();
+
+    // 2. Aktifkan Tracker Pengunjung Harian (Otomatis bertambah per akses)
+    initDailyTracker();
+
+    // 3. Aktifkan Simulasi Live Visitors
+    initLiveStats();
+
+    // 4. Update Jam & Jadwal Shalat
+    updateClock();
+    if (typeof fetchPrayerTimes === "function") fetchPrayerTimes();
+});

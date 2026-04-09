@@ -257,10 +257,40 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
 .section-content { display: flex; flex-direction: column; gap: 1.25rem; }
 
 /* ABOUT FACTS */
-.about-facts { display: flex; gap: 2.5rem; padding-top: 0.5rem; flex-wrap: wrap; }
+.about-facts {
+display: grid;
+grid-template-columns: repeat(2, 1fr); /* 2 kolom di mobile */
+gap: 1.5rem;
+margin-top: 2rem;
+}
+
 .fact { display: flex; flex-direction: column; }
 .fact-number { font-size: 1.75rem; font-weight: bold; color: var(--text); line-height: 1; }
 .fact-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+.fact {
+display: flex;
+flex-direction: column;
+}
+
+.fact-number {
+font-size: 1.5rem;
+font-weight: 700;
+color: var(--accent); /* Menggunakan variabel warna hijau/cyan kamu */
+transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+.about-facts {
+grid-template-columns: repeat(4, 1fr); /* 4 kolom di desktop */
+}
+}
+
+/* Efek pulse kecil saat angka berubah */
+.number-pulse {
+transform: scale(1.1);
+text-shadow: 0 0 10px var(--accent);
+}
 
 /* SKILLS */
 .skills-group { border-left: 2px solid var(--border); padding-left: 1rem; }
@@ -616,4 +646,14 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
     
     /* Agar header tidak terlalu lebar di HP */
     .logo-title { display: none; } 
+}
+
+@keyframes pulse-animation {
+0% { transform: scale(1); }
+50% { transform: scale(1.1); color: var(--accent); }
+100% { transform: scale(1); }
+}
+
+.number-pulse {
+animation: pulse-animation 0.3s ease-in-out;
 }
