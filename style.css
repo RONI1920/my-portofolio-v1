@@ -662,3 +662,44 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
 .number-pulse {
 animation: pulse-animation 0.3s ease-in-out;
 }
+
+
+.feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.feedback-form input, .feedback-form textarea {
+    padding: 12px;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+}
+
+.feedback-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.feedback-item {
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.fb-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+[data-theme="dark"] .feedback-item {
+    background: rgba(255, 255, 255, 0.05);
+}

@@ -413,3 +413,70 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchPrayerTimes();
     }
 });
+
+
+
+const SUPABASE_URL = 'https://nkbqjdmiwmfbejbqsdyl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYnFqZG1pd21mYmVqYnFzZHlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTAxMzUsImV4cCI6MjA5MTU4NjEzNX0.-58DEvE2wD3Y1NJbqIBI0qjCZ51gKRZpcemkkvevrgo';
+
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const feedbackForm = document.getElementById('feedback-form');
+const feedbackList = document.getElementById('feedback-list');
+
+// LOAD DATA
+async function loadFeedback() {
+    if (!feedbackList) return;
+
+    const { data, error } = await supabaseClient
+        .from('feedback')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        feedbackList.innerHTML = "<p>Gagal memuat feedback.</p>";
+        console.error(error);
+        return;
+    }
+
+    if (!data.length) {
+        feedbackList.innerHTML = "<p>Belum ada saran.</p>";
+        return;
+    }
+
+    feedbackList.innerHTML = data.map(item => `
+        <div class="feedback-item">
+            <strong>${item.name}</strong>
+            <p>${item.message}</p>
+        </div>
+    `).join('');
+}
+
+// SUBMIT FORM (HANYA SATU!)
+if (feedbackForm) {
+    feedbackForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('fb-name').value;
+        const message = document.getElementById('fb-message').value;
+
+        const { error } = await supabaseClient
+            .from('feedback')
+            .insert([{ name, message }]);
+
+        if (error) {
+            alert("Gagal: " + error.message);
+            console.error(error);
+            return;
+        }
+
+        alert("Berhasil!");
+        feedbackForm.reset();
+        loadFeedback();
+    });
+}
+
+// LOAD AWAL
+document.addEventListener('DOMContentLoaded', () => {
+    loadFeedback();
+});

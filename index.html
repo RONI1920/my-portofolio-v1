@@ -33,7 +33,10 @@
     content="Developer transitioning from F&B Management to IT. Expert in Laravel & Python.">
   <meta property="twitter:image" content="https://ronihidayat.my.id/assets/og-preview.PNG">
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script type="application/ld+json">
+
 {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -218,6 +221,30 @@
       </div>
     </section>
 
+    <section id="feedback" class="section">
+      <div class="container section-grid">
+        <div class="section-label">
+          <span>04</span>
+          <h2>Feedback</h2>
+        </div>
+        <div class="section-content">
+          <p style="margin-bottom: 1.5rem; opacity: 0.8;"> <strong>Kritik dan saran Anda sangat berharga untuk
+              perkembangan saya.</strong>
+          </p>
+          <form id="feedback-form" class="feedback-form">
+            <input type="text" id="fb-name" placeholder="Nama Anda" required>
+            <textarea id="fb-message" placeholder="Berikan kritik atau saran..." required
+              style="min-height: 120px;"></textarea>
+            <button type="submit" id="btn-kirim" class="btn btn-primary">Kirim Pesan</button>
+          </form>
+
+          <div id="feedback-list" class="feedback-list" style="margin-top: 2.5rem;">
+            <p>Memuat komentar...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="divider"></div>
 
     <section id="experience" class="section">
@@ -302,7 +329,7 @@
               <div class="contact-item">
                 <span class="contact-label"><i class="fas fa-envelope"></i> Email</span>
                 <a href="mailto:rn.hidayat@hotmail.com?subject=Portfolio Inquiry"
-                  class="contact-value">rn.hidayat@hotmail.com/a>
+                  class="contact-value">rn.hidayat@hotmail.com</a>
               </div>
               <div class="contact-item">
                 <span class="contact-label"><i class="fab fa-linkedin"></i> LinkedIn</span>
