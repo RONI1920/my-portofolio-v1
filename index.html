@@ -221,6 +221,8 @@
       </div>
     </section>
 
+    <div class="divider"></div>
+
     <section id="feedback" class="section">
       <div class="container section-grid">
         <div class="section-label">
@@ -232,7 +234,15 @@
               perkembangan saya.</strong>
           </p>
           <form id="feedback-form" class="feedback-form">
+            <div class="rating">
+              <span data-value="1">⭐</span>
+              <span data-value="2">⭐</span>
+              <span data-value="3">⭐</span>
+              <span data-value="4">⭐</span>
+              <span data-value="5">⭐</span>
+            </div>
             <input type="text" id="fb-name" placeholder="Nama Anda" required>
+            <input type="hidden" id="fb-rating" value="5">
             <textarea id="fb-message" placeholder="Berikan kritik atau saran..." required
               style="min-height: 120px;"></textarea>
             <button type="submit" id="btn-kirim" class="btn btn-primary">Kirim Pesan</button>

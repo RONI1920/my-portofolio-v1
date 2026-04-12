@@ -415,23 +415,83 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+// 🔥 CONFIG SUPABASE
 
 const SUPABASE_URL = 'https://nkbqjdmiwmfbejbqsdyl.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYnFqZG1pd21mYmVqYnFzZHlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTAxMzUsImV4cCI6MjA5MTU4NjEzNX0.-58DEvE2wD3Y1NJbqIBI0qjCZ51gKRZpcemkkvevrgo';
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+
+// 🎯 ELEMENT
 const feedbackForm = document.getElementById('feedback-form');
 const feedbackList = document.getElementById('feedback-list');
+const ratingInput = document.getElementById('fb-rating');
 
-// LOAD DATA
+
+// ⭐ RATING LOGIC
+const stars = document.querySelectorAll('.rating span');
+
+stars.forEach(star => {
+    star.addEventListener('click', () => {
+        const value = star.getAttribute('data-value');
+        ratingInput.value = value;
+
+        stars.forEach(s => {
+            s.style.opacity = s.getAttribute('data-value') <= value ? '1' : '0.3';
+        });
+    });
+});
+
+// ⏱️ FORMAT WAKT
+function timeAgo(date) {
+    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+
+    const intervals = {
+        tahun: 31536000,
+        bulan: 2592000,
+        hari: 86400,
+        jam: 3600,
+        menit: 60
+    };
+
+    for (let key in intervals) {
+        const interval = Math.floor(seconds / intervals[key]);
+        if (interval > 1) {
+            return `${interval} ${key} lalu`;
+        }
+    }
+
+    return "Baru saja";
+}
+
+// ⭐ RENDER STAR
+function renderStars(rating) {
+    return '⭐'.repeat(rating || 5);
+}
+
+// 🔒 ESCAPE HTML (ANTI XSS)
+function escapeHTML(str) {
+    return str.replace(/[&<>"']/g, tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    }[tag]));
+}
+
+// 📥 LOAD FEEDBACK
 async function loadFeedback() {
     if (!feedbackList) return;
+
+    feedbackList.innerHTML = "Loading...";
 
     const { data, error } = await supabaseClient
         .from('feedback')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(20);
 
     if (error) {
         feedbackList.innerHTML = "<p>Gagal memuat feedback.</p>";
@@ -445,24 +505,36 @@ async function loadFeedback() {
     }
 
     feedbackList.innerHTML = data.map(item => `
-        <div class="feedback-item">
-            <strong>${item.name}</strong>
-            <p>${item.message}</p>
+            <div class="feedback-item">
+        <div class="fb-rating">
+            ${renderStars(item.rating)}
         </div>
+        <div class="fb-meta">
+            <strong>${escapeHTML(item.name)}</strong>
+            <small>${timeAgo(item.created_at)}</small>
+        </div>
+        <p>${escapeHTML(item.message)}</p>
+
+    </div>
     `).join('');
 }
 
-// SUBMIT FORM (HANYA SATU!)
+// 📤 SUBMIT FORM
 if (feedbackForm) {
     feedbackForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const name = document.getElementById('fb-name').value;
         const message = document.getElementById('fb-message').value;
+        const rating = ratingInput.value;
 
         const { error } = await supabaseClient
             .from('feedback')
-            .insert([{ name, message }]);
+            .insert([{
+                name,
+                message,
+                rating
+            }]);
 
         if (error) {
             alert("Gagal: " + error.message);
@@ -472,11 +544,16 @@ if (feedbackForm) {
 
         alert("Berhasil!");
         feedbackForm.reset();
+
+        // reset rating UI
+        ratingInput.value = 5;
+        stars.forEach(s => s.style.opacity = '1');
+
         loadFeedback();
     });
 }
 
-// LOAD AWAL
+// 🚀 INIT
 document.addEventListener('DOMContentLoaded', () => {
     loadFeedback();
 });
