@@ -222,38 +222,38 @@
     </section>
 
     <div class="divider"></div>
-
-    <!-- <section id="feedback" class="section">
-      <div class="container section-grid">
-        <div class="section-label">
-          <span>04</span>
-          <h2>Feedback</h2>
-        </div>
-        <div class="section-content">
-          <p style="margin-bottom: 1.5rem; opacity: 0.8;"> <strong>Kritik dan saran Anda sangat berharga untuk
-              perkembangan saya.</strong>
-          </p>
-          <form id="feedback-form" class="feedback-form">
-            <div class="rating">
-              <span data-value="1">⭐</span>
-              <span data-value="2">⭐</span>
-              <span data-value="3">⭐</span>
-              <span data-value="4">⭐</span>
-              <span data-value="5">⭐</span>
-            </div>
-            <input type="text" id="fb-name" placeholder="Nama Anda" required>
-            <input type="hidden" id="fb-rating" value="5">
-            <textarea id="fb-message" placeholder="Berikan kritik atau saran..." required
-              style="min-height: 120px;"></textarea>
-            <button type="submit" id="btn-kirim" class="btn btn-primary">Kirim Pesan</button>
-          </form>
-
-          <div id="feedback-list" class="feedback-list" style="margin-top: 2.5rem;">
-            <p>Memuat komentar...</p>
+    <section id="reviews" class="section">
+      <div class="container">
+        <div class="section-grid">
+          <div class="section-label">
+            <span>05</span>
+            <h2>Reviews</h2>
+          </div>
+          <div class="section-content">
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">
+              <strong>Apa kata mereka tentang saya.</strong>
+            </p>
           </div>
         </div>
+
+        <!-- Slider FULL WIDTH — di luar section-grid agar tidak terpotong -->
+        <div class="review-slider-outer">
+          <div class="review-slider-wrapper" id="review-wrapper">
+            <div class="review-slider-track" id="review-track">
+              <div class="review-loading">Memuat ulasan...</div>
+            </div>
+          </div>
+          <div class="review-slider-footer">
+            <div class="review-dots" id="review-dots"></div>
+            <div class="review-nav">
+              <button class="review-nav-btn" id="review-prev" aria-label="Sebelumnya">&#8592;</button>
+              <button class="review-nav-btn" id="review-next" aria-label="Berikutnya">&#8594;</button>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </section> -->
+    </section>
 
     <div class="divider"></div>
 
@@ -382,6 +382,36 @@
           </div>
         </div>
 
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="feedback" class="section">
+      <div class="container section-grid">
+        <div class="section-label">
+          <span>06</span>
+          <h2>Feedback</h2>
+        </div>
+        <div class="section-content">
+          <p style="margin-bottom: 1.5rem; opacity: 0.8;"> <strong>Kritik dan saran Anda sangat berharga untuk
+              perkembangan saya.</strong>
+          </p>
+          <form id="feedback-form" class="feedback-form">
+            <div class="rating">
+              <span data-value="1">⭐</span>
+              <span data-value="2">⭐</span>
+              <span data-value="3">⭐</span>
+              <span data-value="4">⭐</span>
+              <span data-value="5">⭐</span>
+            </div>
+            <input type="text" id="fb-name" placeholder="Nama Anda" required>
+            <input type="hidden" id="fb-rating" value="5">
+            <textarea id="fb-message" placeholder="Berikan kritik atau saran..." required
+              style="min-height: 120px;"></textarea>
+            <button type="submit" id="btn-kirim" class="btn btn-primary">Kirim Pesan</button>
+          </form>
+        </div>
       </div>
     </section>
 

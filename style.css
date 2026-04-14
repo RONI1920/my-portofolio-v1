@@ -663,6 +663,163 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
 animation: pulse-animation 0.3s ease-in-out;
 }
 
+/* bagian FeedBack */
+
+/* =============================================
+   TEMPEL INI DI style.css
+   Bisa di bagian paling bawah file
+============================================= */
+
+/* REVIEW SLIDER — FULL WIDTH */
+.review-slider-outer {
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.review-slider-wrapper {
+    overflow: hidden;
+    width: 100%;
+}
+
+.review-slider-track {
+    display: flex;
+    gap: 16px;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+}
+
+/* Lebar card = (100% container - 3 gap) / 4 card */
+.review-card {
+    flex: 0 0 calc((100% - 48px) / 4);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.review-card:hover {
+    border-color: var(--accent);
+}
+
+.review-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.review-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    flex-shrink: 0;
+    font-family: Georgia, serif;
+}
+
+.review-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text);
+    margin: 0;
+}
+
+.review-stars {
+    margin-bottom: 10px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--star-color);
+}
+
+.review-comment {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.review-loading {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    padding: 1.5rem;
+}
+
+/* FOOTER SLIDER */
+.review-slider-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.25rem;
+}
+
+.review-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.review-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    transition: background 0.3s;
+}
+
+.review-dot.active {
+    background: var(--text);
+}
+
+.review-nav {
+    display: flex;
+    gap: 8px;
+}
+
+.review-nav-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.review-nav-btn:hover {
+    background: var(--bg-card);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .review-card {
+        flex: 0 0 calc((100% - 32px) / 3);
+    }
+}
+
+@media (max-width: 768px) {
+    .review-card {
+        flex: 0 0 calc((100% - 16px) / 2);
+    }
+}
+
+@media (max-width: 480px) {
+    .review-card {
+        flex: 0 0 100%;
+    }
+}
 
 .feedback-form {
     display: flex;

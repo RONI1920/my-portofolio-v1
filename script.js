@@ -416,37 +416,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // 🔥 CONFIG SUPABASE
-
 const SUPABASE_URL = 'https://nkbqjdmiwmfbejbqsdyl.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYnFqZG1pd21mYmVqYnFzZHlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTAxMzUsImV4cCI6MjA5MTU4NjEzNX0.-58DEvE2wD3Y1NJbqIBI0qjCZ51gKRZpcemkkvevrgo';
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
 
 // 🎯 ELEMENT
 const feedbackForm = document.getElementById('feedback-form');
 const feedbackList = document.getElementById('feedback-list');
 const ratingInput = document.getElementById('fb-rating');
 
-
 // ⭐ RATING LOGIC
 const stars = document.querySelectorAll('.rating span');
-
 stars.forEach(star => {
     star.addEventListener('click', () => {
         const value = star.getAttribute('data-value');
         ratingInput.value = value;
-
         stars.forEach(s => {
             s.style.opacity = s.getAttribute('data-value') <= value ? '1' : '0.3';
         });
     });
 });
 
-// ⏱️ FORMAT WAKT
+// ⏱️ FORMAT WAKTU
 function timeAgo(date) {
     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-
     const intervals = {
         tahun: 31536000,
         bulan: 2592000,
@@ -454,37 +448,29 @@ function timeAgo(date) {
         jam: 3600,
         menit: 60
     };
-
     for (let key in intervals) {
         const interval = Math.floor(seconds / intervals[key]);
-        if (interval > 1) {
-            return `${interval} ${key} lalu`;
-        }
+        if (interval > 1) return `${interval} ${key} lalu`;
     }
-
     return "Baru saja";
-}
-
-// ⭐ RENDER STAR
-function renderStars(rating) {
-    return '⭐'.repeat(rating || 5);
 }
 
 // 🔒 ESCAPE HTML (ANTI XSS)
 function escapeHTML(str) {
+    if (!str) return '';
     return str.replace(/[&<>"']/g, tag => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
     }[tag]));
 }
 
-// 📥 LOAD FEEDBACK
+// ⭐ RENDER STAR (untuk feedback list)
+function renderStarsEmoji(rating) {
+    return '⭐'.repeat(rating || 5);
+}
+
+// 📥 LOAD FEEDBACK LIST
 async function loadFeedback() {
     if (!feedbackList) return;
-
     feedbackList.innerHTML = "Loading...";
 
     const { data, error } = await supabaseClient
@@ -505,20 +491,18 @@ async function loadFeedback() {
     }
 
     feedbackList.innerHTML = data.map(item => `
-            <div class="feedback-item">
-        <div class="fb-rating">
-            ${renderStars(item.rating)}
+        <div class="feedback-item">
+            <div class="fb-rating">${renderStarsEmoji(item.rating)}</div>
+            <div class="fb-meta">
+                <strong>${escapeHTML(item.name)}</strong>
+                <small>${timeAgo(item.created_at)}</small>
+            </div>
+            <p>${escapeHTML(item.message)}</p>
         </div>
-        <div class="fb-meta">
-            <strong>${escapeHTML(item.name)}</strong>
-            <small>${timeAgo(item.created_at)}</small>
-        </div>
-        <p>${escapeHTML(item.message)}</p>
-
-    </div>
     `).join('');
 }
 
+// 📤 SUBMIT FORM
 // 📤 SUBMIT FORM
 if (feedbackForm) {
     feedbackForm.addEventListener('submit', async (e) => {
@@ -553,7 +537,202 @@ if (feedbackForm) {
     });
 }
 
+// ==========================================
+// 🎠 REVIEW SLIDER — dari tabel 'feedback'
+// ==========================================
+const reviewSlider = (function () {
+
+    const VISIBLE = 4;
+    const INTERVAL = 3000;
+
+    const AVATAR_COLORS = [
+        { bg: '#dde4ed', text: '#2d5a8e' },
+        { bg: '#d4edda', text: '#1a6632' },
+        { bg: '#fdebd0', text: '#a04000' },
+        { bg: '#f5d4dc', text: '#922b3e' },
+        { bg: '#e8daef', text: '#6c3483' },
+        { bg: '#d1ecf1', text: '#0c5460' },
+        { bg: '#fff3cd', text: '#856404' },
+    ];
+
+    let reviews = [];
+    let current = 0;
+    let maxOffset = 0;
+    let timer = null;
+
+    // Hitung jumlah card visible berdasarkan lebar wrapper
+    function getVisibleCount(width) {
+        if (width < 480) return 1;
+        if (width < 768) return 2;
+        if (width < 1024) return 3;
+        return VISIBLE;
+    }
+
+    function getVisible() {
+        const wrapper = document.getElementById('review-wrapper');
+        if (!wrapper) return VISIBLE;
+        return getVisibleCount(wrapper.offsetWidth);
+    }
+
+    function getCardWidth() {
+        const wrapper = document.getElementById('review-wrapper');
+        if (!wrapper) return 200;
+        const w = wrapper.offsetWidth;
+        const vis = getVisibleCount(w);
+        return (w - (vis - 1) * 16) / vis;
+    }
+
+    function getInitials(name) {
+        return (name || '?').split(' ').slice(0, 2).map(w => w[0].toUpperCase()).join('');
+    }
+
+    function renderStars(rating) {
+        const n = Math.min(5, Math.max(0, Math.round(rating) || 0));
+        return Array.from({ length: 5 }, (_, i) =>
+            `<span style="color:${i < n ? 'var(--star-color)' : 'var(--border)'}">&#9733;</span>`
+        ).join('');
+    }
+
+    function buildCards() {
+        const track = document.getElementById('review-track');
+        const cardWidth = getCardWidth();
+        if (!track) return;
+        track.innerHTML = '';
+
+        reviews.forEach((r, idx) => {
+            const color = AVATAR_COLORS[idx % AVATAR_COLORS.length];
+            const initials = getInitials(r.name);
+            const card = document.createElement('div');
+            card.className = 'review-card';
+            card.style.flex = `0 0 ${cardWidth}px`;
+            card.innerHTML = `
+                <div class="review-card-header">
+                    <div class="review-avatar" style="background:${color.bg};color:${color.text};">${initials}</div>
+                    <div>
+                        <p class="review-name">${escapeHTML(r.name) || 'Anonim'}</p>
+                    </div>
+                </div>
+                <div class="review-stars">${renderStars(r.rating)}</div>
+                <p class="review-comment">"${escapeHTML(r.message) || ''}"</p>
+            `;
+            track.appendChild(card);
+        });
+    }
+
+    function buildDots() {
+        const dotsEl = document.getElementById('review-dots');
+        if (!dotsEl) return;
+        dotsEl.innerHTML = '';
+
+        const vis = getVisible();
+        maxOffset = Math.max(0, reviews.length - vis);
+
+        for (let i = 0; i <= maxOffset; i++) {
+            const d = document.createElement('button');
+            d.className = 'review-dot' + (i === 0 ? ' active' : '');
+            d.id = `rdot-${i}`;
+            d.onclick = () => { current = i; update(); resetTimer(); };
+            dotsEl.appendChild(d);
+        }
+    }
+
+    function update() {
+        const cardWidth = getCardWidth();
+        const vis = getVisible();
+        maxOffset = Math.max(0, reviews.length - vis);
+        current = Math.min(current, maxOffset);
+
+        const track = document.getElementById('review-track');
+        if (track) track.style.transform = `translateX(-${current * (cardWidth + 16)}px)`;
+
+        for (let i = 0; i <= maxOffset; i++) {
+            const d = document.getElementById(`rdot-${i}`);
+            if (d) d.className = 'review-dot' + (i === current ? ' active' : '');
+        }
+
+        document.querySelectorAll('.review-card')
+            .forEach(c => c.style.flex = `0 0 ${cardWidth}px`);
+    }
+
+    function autoSlide() {
+        maxOffset = Math.max(0, reviews.length - getVisible());
+        current = current >= maxOffset ? 0 : current + 1;
+        update();
+    }
+
+    function resetTimer() {
+        clearInterval(timer);
+        timer = setInterval(autoSlide, INTERVAL);
+    }
+
+    function setupNav() {
+        const prev = document.getElementById('review-prev');
+        const next = document.getElementById('review-next');
+        if (prev) prev.onclick = () => {
+            current = Math.max(0, current - 1);
+            update(); resetTimer();
+        };
+        if (next) next.onclick = () => {
+            maxOffset = Math.max(0, reviews.length - getVisible());
+            current = Math.min(current + 1, maxOffset);
+            update(); resetTimer();
+        };
+    }
+
+    function setupHover() {
+        const wrapper = document.getElementById('review-wrapper');
+        if (!wrapper) return;
+        wrapper.addEventListener('mouseenter', () => clearInterval(timer));
+        wrapper.addEventListener('mouseleave', () => { if (reviews.length) resetTimer(); });
+    }
+
+    window.addEventListener('resize', () => {
+        if (!reviews.length) return;
+        buildCards();
+        buildDots();
+        update();
+    });
+
+    // ✅ Ambil dari tabel 'feedback' — kolom: name, message, rating
+    async function fetchReviews() {
+        const track = document.getElementById('review-track');
+        if (!track) return;
+
+        try {
+            const { data, error } = await supabaseClient
+                .from('feedback')
+                .select('name, message, rating')
+                .order('id', { ascending: false });
+
+            if (error) throw new Error(error.message);
+
+            if (!data || !data.length) {
+                track.innerHTML = '<div class="review-loading">Belum ada ulasan.</div>';
+                return;
+            }
+
+            reviews = data;
+            maxOffset = Math.max(0, reviews.length - VISIBLE);
+
+            buildCards();
+            buildDots();
+            update();
+            resetTimer();
+
+        } catch (err) {
+            const t = document.getElementById('review-track');
+            if (t) t.innerHTML = `<div class="review-loading">Gagal memuat: ${err.message}</div>`;
+            console.error('Review slider error:', err);
+        }
+    }
+
+    // Expose fetch agar bisa dipanggil setelah submit form
+    return { fetch: fetchReviews };
+
+})();
+
 // 🚀 INIT
 document.addEventListener('DOMContentLoaded', () => {
     loadFeedback();
+    reviewSlider.fetch();
 });
