@@ -503,7 +503,6 @@ async function loadFeedback() {
 }
 
 // 📤 SUBMIT FORM
-// 📤 SUBMIT FORM
 if (feedbackForm) {
     feedbackForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -538,12 +537,11 @@ if (feedbackForm) {
 }
 
 // ==========================================
-// 🎠 REVIEW SLIDER — dari tabel 'feedback'
+// REVIEW SLIDER — CSS MARQUEE INFINITE LOOP
+// Ganti seluruh blok reviewSlider yang lama
 // ==========================================
-const reviewSlider = (function () {
 
-    const VISIBLE = 4;
-    const INTERVAL = 3000;
+const reviewSlider = (function () {
 
     const AVATAR_COLORS = [
         { bg: '#dde4ed', text: '#2d5a8e' },
@@ -554,33 +552,6 @@ const reviewSlider = (function () {
         { bg: '#d1ecf1', text: '#0c5460' },
         { bg: '#fff3cd', text: '#856404' },
     ];
-
-    let reviews = [];
-    let current = 0;
-    let maxOffset = 0;
-    let timer = null;
-
-    // Hitung jumlah card visible berdasarkan lebar wrapper
-    function getVisibleCount(width) {
-        if (width < 480) return 1;
-        if (width < 768) return 2;
-        if (width < 1024) return 3;
-        return VISIBLE;
-    }
-
-    function getVisible() {
-        const wrapper = document.getElementById('review-wrapper');
-        if (!wrapper) return VISIBLE;
-        return getVisibleCount(wrapper.offsetWidth);
-    }
-
-    function getCardWidth() {
-        const wrapper = document.getElementById('review-wrapper');
-        if (!wrapper) return 200;
-        const w = wrapper.offsetWidth;
-        const vis = getVisibleCount(w);
-        return (w - (vis - 1) * 16) / vis;
-    }
 
     function getInitials(name) {
         return (name || '?').split(' ').slice(0, 2).map(w => w[0].toUpperCase()).join('');
@@ -593,107 +564,21 @@ const reviewSlider = (function () {
         ).join('');
     }
 
-    function buildCards() {
-        const track = document.getElementById('review-track');
-        const cardWidth = getCardWidth();
-        if (!track) return;
-        track.innerHTML = '';
-
-        reviews.forEach((r, idx) => {
-            const color = AVATAR_COLORS[idx % AVATAR_COLORS.length];
-            const initials = getInitials(r.name);
-            const card = document.createElement('div');
-            card.className = 'review-card';
-            card.style.flex = `0 0 ${cardWidth}px`;
-            card.innerHTML = `
+    function buildCardHTML(r, idx) {
+        const color = AVATAR_COLORS[idx % AVATAR_COLORS.length];
+        const initials = getInitials(r.name);
+        return `
+            <div class="review-card">
                 <div class="review-card-header">
                     <div class="review-avatar" style="background:${color.bg};color:${color.text};">${initials}</div>
-                    <div>
-                        <p class="review-name">${escapeHTML(r.name) || 'Anonim'}</p>
-                    </div>
+                    <div><p class="review-name">${escapeHTML(r.name) || 'Anonim'}</p></div>
                 </div>
                 <div class="review-stars">${renderStars(r.rating)}</div>
                 <p class="review-comment">"${escapeHTML(r.message) || ''}"</p>
-            `;
-            track.appendChild(card);
-        });
+            </div>
+        `;
     }
 
-    function buildDots() {
-        const dotsEl = document.getElementById('review-dots');
-        if (!dotsEl) return;
-        dotsEl.innerHTML = '';
-
-        const vis = getVisible();
-        maxOffset = Math.max(0, reviews.length - vis);
-
-        for (let i = 0; i <= maxOffset; i++) {
-            const d = document.createElement('button');
-            d.className = 'review-dot' + (i === 0 ? ' active' : '');
-            d.id = `rdot-${i}`;
-            d.onclick = () => { current = i; update(); resetTimer(); };
-            dotsEl.appendChild(d);
-        }
-    }
-
-    function update() {
-        const cardWidth = getCardWidth();
-        const vis = getVisible();
-        maxOffset = Math.max(0, reviews.length - vis);
-        current = Math.min(current, maxOffset);
-
-        const track = document.getElementById('review-track');
-        if (track) track.style.transform = `translateX(-${current * (cardWidth + 16)}px)`;
-
-        for (let i = 0; i <= maxOffset; i++) {
-            const d = document.getElementById(`rdot-${i}`);
-            if (d) d.className = 'review-dot' + (i === current ? ' active' : '');
-        }
-
-        document.querySelectorAll('.review-card')
-            .forEach(c => c.style.flex = `0 0 ${cardWidth}px`);
-    }
-
-    function autoSlide() {
-        maxOffset = Math.max(0, reviews.length - getVisible());
-        current = current >= maxOffset ? 0 : current + 1;
-        update();
-    }
-
-    function resetTimer() {
-        clearInterval(timer);
-        timer = setInterval(autoSlide, INTERVAL);
-    }
-
-    function setupNav() {
-        const prev = document.getElementById('review-prev');
-        const next = document.getElementById('review-next');
-        if (prev) prev.onclick = () => {
-            current = Math.max(0, current - 1);
-            update(); resetTimer();
-        };
-        if (next) next.onclick = () => {
-            maxOffset = Math.max(0, reviews.length - getVisible());
-            current = Math.min(current + 1, maxOffset);
-            update(); resetTimer();
-        };
-    }
-
-    function setupHover() {
-        const wrapper = document.getElementById('review-wrapper');
-        if (!wrapper) return;
-        wrapper.addEventListener('mouseenter', () => clearInterval(timer));
-        wrapper.addEventListener('mouseleave', () => { if (reviews.length) resetTimer(); });
-    }
-
-    window.addEventListener('resize', () => {
-        if (!reviews.length) return;
-        buildCards();
-        buildDots();
-        update();
-    });
-
-    // ✅ Ambil dari tabel 'feedback' — kolom: name, message, rating
     async function fetchReviews() {
         const track = document.getElementById('review-track');
         if (!track) return;
@@ -711,13 +596,17 @@ const reviewSlider = (function () {
                 return;
             }
 
-            reviews = data;
-            maxOffset = Math.max(0, reviews.length - VISIBLE);
+            // Buat HTML satu set card
+            const oneSet = data.map((r, idx) => buildCardHTML(r, idx)).join('');
 
-            buildCards();
-            buildDots();
-            update();
-            resetTimer();
+            // KUNCI INFINITE LOOP:
+            // Duplikasi 2x — CSS animation geser -50% = tepat 1 set penuh
+            // Saat mencapai -50%, posisi visual identik dengan 0% → loop mulus
+            track.innerHTML = oneSet + oneSet;
+
+            // Sesuaikan kecepatan dengan jumlah card (lebih banyak = lebih lambat)
+            const duration = Math.max(20, data.length * 5);
+            track.style.animationDuration = `${duration}s`;
 
         } catch (err) {
             const t = document.getElementById('review-track');
@@ -726,10 +615,38 @@ const reviewSlider = (function () {
         }
     }
 
-    // Expose fetch agar bisa dipanggil setelah submit form
     return { fetch: fetchReviews };
 
 })();
+
+// 📤 SUBMIT FORM — refresh slider setelah submit
+if (feedbackForm) {
+    feedbackForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('fb-name').value;
+        const message = document.getElementById('fb-message').value;
+        const rating = ratingInput.value;
+
+        const { error } = await supabaseClient
+            .from('feedback')
+            .insert([{ name, message, rating }]);
+
+        if (error) {
+            alert("Gagal: " + error.message);
+            console.error(error);
+            return;
+        }
+
+        alert("Berhasil!");
+        feedbackForm.reset();
+        ratingInput.value = 5;
+        stars.forEach(s => s.style.opacity = '1');
+
+        loadFeedback();
+        reviewSlider.fetch(); // refresh slider juga
+    });
+}
 
 // 🚀 INIT
 document.addEventListener('DOMContentLoaded', () => {

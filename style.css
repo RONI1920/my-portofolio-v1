@@ -664,37 +664,52 @@ animation: pulse-animation 0.3s ease-in-out;
 }
 
 /* bagian FeedBack */
-
 /* =============================================
-   TEMPEL INI DI style.css
-   Bisa di bagian paling bawah file
+   REVIEW SLIDER — CSS INFINITE MARQUEE
+   Ganti CSS review slider lama dengan ini
 ============================================= */
 
-/* REVIEW SLIDER — FULL WIDTH */
 .review-slider-outer {
     margin-top: 2rem;
     width: 100%;
+    overflow: hidden;
+    /* Efek fade di pinggir kiri & kanan */
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
 }
 
 .review-slider-wrapper {
-    overflow: hidden;
     width: 100%;
+    overflow: hidden;
 }
 
+/* Track digerakkan murni oleh CSS animation — tidak perlu JS transform */
 .review-slider-track {
     display: flex;
     gap: 16px;
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: transform;
+    width: max-content;
+    animation: marquee-slide 30s linear infinite;
 }
 
-/* Lebar card = (100% container - 3 gap) / 4 card */
+/* Pause saat hover */
+.review-slider-track:hover {
+    animation-play-state: paused;
+}
+
+/* Keyframe: geser ke kiri tepat sebesar setengah track
+   (karena JS akan menduplikasi card 2x, jadi 50% = 1 set penuh) */
+@keyframes marquee-slide {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Lebar card FIXED — kunci agar kalkulasi -50% tepat */
 .review-card {
-    flex: 0 0 calc((100% - 48px) / 4);
+    flex: 0 0 300px;
     background-color: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.25rem;
+    border-radius: 12px;
+    padding: 1.5rem;
     box-sizing: border-box;
     transition: border-color 0.2s;
 }
@@ -734,7 +749,6 @@ animation: pulse-animation 0.3s ease-in-out;
     margin-bottom: 10px;
     font-size: 14px;
     letter-spacing: 1px;
-    color: var(--star-color);
 }
 
 .review-comment {
@@ -750,77 +764,19 @@ animation: pulse-animation 0.3s ease-in-out;
     padding: 1.5rem;
 }
 
-/* FOOTER SLIDER */
+/* Sembunyikan dots & nav karena sudah auto-loop */
 .review-slider-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 1.25rem;
-}
-
-.review-dots {
-    display: flex;
-    gap: 8px;
-}
-
-.review-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--border);
-    cursor: pointer;
-    border: none;
-    padding: 0;
-    transition: background 0.3s;
-}
-
-.review-dot.active {
-    background: var(--text);
-}
-
-.review-nav {
-    display: flex;
-    gap: 8px;
-}
-
-.review-nav-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-}
-
-.review-nav-btn:hover {
-    background: var(--bg-card);
-}
-
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-    .review-card {
-        flex: 0 0 calc((100% - 32px) / 3);
-    }
-}
-
-@media (max-width: 768px) {
-    .review-card {
-        flex: 0 0 calc((100% - 16px) / 2);
-    }
+    display: none;
 }
 
 @media (max-width: 480px) {
     .review-card {
-        flex: 0 0 100%;
+        flex: 0 0 240px;
     }
 }
 
+
+/* Form Style */
 .feedback-form {
     display: flex;
     flex-direction: column;
