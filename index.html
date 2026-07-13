@@ -5,32 +5,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Roni Hidayat | Portfolio — Developer</title>
+  <title>Roni Hidayat | Laravel Developer Jakarta Timur — Portfolio</title>
   <link rel="icon" type="image/png" href="assets/logo-ronidev.png">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
-  <meta name="title" content="Roni Hidayat | Portfolio — Developer">
+  <meta name="title" content="Roni Hidayat | Laravel Developer Jakarta Timur — Portfolio">
   <meta name="description"
-    content="Portfolio Roni Hidayat, seorang Developer dengan Tools Laravel, dan Dapat Membaca Data F&B. Berpengalaman 8 tahun di industri hospitality.">
+    content="Portfolio Roni Hidayat, Laravel Developer di kawasan Jalan Pahlawan Revolusi, Duren Sawit, Jakarta Timur, dengan kemampuan membaca data F&B. Berpengalaman 8 tahun di industri hospitality, kini fokus web development.">
   <meta name="keywords"
-    content="Roni Hidayat, Developer, Laravel Developer Indonesia, Data-Driven Specialist, Portfolio Developer">
+    content="Roni Hidayat, Laravel Developer Jakarta Timur, Web Developer Duren Sawit, Developer Jalan Pahlawan Revolusi, Junior Developer Jakarta Timur, Data-Driven Specialist Jakarta">
   <meta name="author" content="Roni Hidayat">
+  <meta name="geo.region" content="ID-JK">
+  <meta name="geo.placename" content="Duren Sawit, Jakarta Timur">
+  <meta name="ICBM" content="-6.2264, 106.9111">
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ronihidayat.my.id/">
-  <meta property="og:title" content="Roni Hidayat | Developer Portfolio">
+  <meta property="og:title" content="Roni Hidayat | Laravel Developer Jakarta">
   <meta property="og:description"
-    content="Bridging the gap between business challenges and digital solutions. Lihat proyek Laravel dan Python saya.">
+    content="Laravel Developer berbasis di Jakarta. Bridging the gap between business challenges and digital solutions. Lihat proyek Laravel dan Python saya.">
   <meta property="og:image" content="https://ronihidayat.my.id/assets/og-preview.png">
   <meta property="og:image" content="https://ronihidayat.my.id/assets/og-preview.png?v=1.1">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="id_ID">
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://ronihidayat.my.id/">
-  <meta property="twitter:title" content="Roni Hidayat | Developer Portfolio">
+  <meta property="twitter:title" content="Roni Hidayat | Laravel Developer Jakarta">
   <meta property="twitter:description"
-    content="Developer transitioning from F&B Management to IT. Expert in Laravel & Python.">
+    content="Laravel Developer di Jakarta, transitioning from F&B Management to IT. Expert in Laravel & Python.">
   <meta property="twitter:image" content="https://ronihidayat.my.id/assets/og-preview.PNG">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -41,8 +45,24 @@
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Roni Hidayat",
-  "jobTitle": "Developer",
+  "jobTitle": "Laravel Developer",
+  "description": "Laravel Developer berbasis di Jakarta dengan latar belakang 8+ tahun di industri hospitality/F&B, kini fokus pada web development dan data-driven solutions.",
   "url": "https://ronihidayat.my.id",
+  "image": "https://ronihidayat.my.id/assets/profile-1.png",
+  "email": "mailto:rn.hidayat@hotmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Jalan Pahlawan Revolusi",
+    "addressLocality": "Duren Sawit, Jakarta Timur",
+    "addressRegion": "DKI Jakarta",
+    "postalCode": "13470",
+    "addressCountry": "ID"
+  },
+  "knowsAbout": ["Laravel", "PHP", "MySQL", "PostgreSQL", "Supabase", "React", "F&B Data Analysis"],
+  "alumniOf": {
+    "@type": "CollegeOrUniversity",
+    "name": "Universitas Terbuka"
+  },
   "sameAs": [
     "https://github.com/RONI1920",
     "https://www.linkedin.com/in/roni-hidayat0692/"
@@ -80,15 +100,17 @@
           <button id="theme-toggle" aria-label="Toggle theme">
             <span id="theme-icon">☾</span>
           </button>
-          <button id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <!-- <button id="hamburger" aria-label="Open menu" aria-expanded="false">
             <span class="ham-line"></span>
             <span class="ham-line"></span>
             <span class="ham-line"></span>
-          </button>
+          </button> -->
         </div>
       </nav>
+
+
       <!-- Mobile drawer -->
-      <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <!-- <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
         <ul class="mobile-nav-links">
           <li><a href="#about">About</a></li>
           <li><a href="#skills">Skills</a></li>
@@ -97,7 +119,42 @@
           <li><a href="#feedback">Feedback</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
+      </div> -->
+
+      <!-- Test Nav Bar Mbile -->
+      <div class="bottom-nav-mobile">
+
+        <a href="#about" class="bnav-item" onclick="setBnav(this)">
+          <div class="bnav-icon">📅</div>
+          <span class="bnav-label">About</span>
+        </a>
+
+        <a href="#skills" class="bnav-item" onclick="setBnav(this)">
+          <div class="bnav-icon">📍</div>
+          <span class="bnav-label">Skills</span>
+        </a>
+
+        <a href="#projects" class="bnav-item active" onclick="setBnav(this)">
+          <div class="bnav-icon">🏠</div>
+          <span class="bnav-label">Projects</span>
+        </a>
+
+
+        <a href="#experience" class="bnav-item" onclick="setBnav(this)">
+          <div class="bnav-icon">📖</div>
+          <span class="bnav-label">Experience</span>
+        </a>
+
+        <a href="#contact" class="bnav-item" onclick="setBnav(this)">
+          <div class="bnav-icon">💬</div>
+          <span class="bnav-label">Contact</span>
+        </a>
+
       </div>
+
+
+      <!-- End Method -->
+
     </div>
 
 
@@ -111,11 +168,10 @@
           <div class="hero-text-side">
             <p class="hero-label">Hi, I'm</p>
             <h1 class="hero-name">Roni Hidayat</h1>
+            <p class="hero-subtitle" style="opacity:0.75; margin-top:-0.5rem;">Laravel Developer based in Duren Sawit, Jakarta Timur</p>
             <p class="hero-desc">
-              An aspiring Web Developer with a solid background in F&B operational management,
-              currently transitioning into the IT industry. As an Information Systems student,
-              I specialize in bridging the gap between real-world business challenges and
-              scalable digital solutions.
+              I build systems that turn operational chaos into structured, data-driven decisions.
+              With 8+ years in Jakarta's hospitality industry, I don't just write code — I solve real business problems.
             </p>
             <div class="hero-cta">
               <a href="#projects" class="btn btn-primary">View Projects</a>
@@ -124,7 +180,7 @@
           </div>
 
           <div class="hero-image-side">
-            <img src="assets/profile-1.png" alt="Foto Profil Roni Hidayat - Web Developer" loading="lazy">
+            <img src="assets/profile-1.png" alt="Foto Profil Roni Hidayat - Laravel Developer Jakarta" loading="lazy">
           </div>
 
         </div>
@@ -141,14 +197,16 @@
         </div>
         <div class="section-content">
           <p>
-            I am a Developer and Information Systems student at Universitas Terbuka,
-            actively building digital solutions. My background spans both frontend and backend
-            development, with a keen focus on writing <strong>maintainable and scalable code</strong>.
+            I am a <strong>Laravel Developer based in Duren Sawit, Jakarta Timur</strong> (near Jalan Pahlawan
+            Revolusi) and Information Systems student at Universitas Terbuka, actively building digital
+            solutions. My background spans both frontend and backend development, with a keen focus on writing
+            <strong>maintainable and scalable code</strong>.
           </p>
           <p>
-            With over 8 years of leadership in the hospitality industry, I bring a unique
+            With over 8 years of leadership in Jakarta's hospitality industry, I bring a unique
             perspective to tech: the ability to transform complex operational data into
-            actionable insights. I am on a mission to evolve into a <strong>Data-Driven Specialist</strong> by 2027.
+            actionable insights. I am on a mission to evolve into a <strong>Data-Driven Specialist</strong> by 2027,
+            and I'm open to Junior/Intern Developer roles in the Jakarta area or remote.
           </p>
           <div class="about-facts">
             <div class="fact">
@@ -263,8 +321,8 @@
         </div>
         <div class="section-content">
           <p class="section-intro" style="margin-bottom: 2rem; opacity: 0.8;">
-            Leveraging 8+ years of operational excellence in world-class hospitality groups to build better software
-            solutions.
+            Leveraging 8+ years of operational excellence in world-class hospitality groups in Jakarta
+            to build better software solutions.
           </p>
           <div class="timeline">
             <div class="timeline-item">

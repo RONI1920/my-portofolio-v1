@@ -653,3 +653,73 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFeedback();
     reviewSlider.fetch();
 });
+
+
+// script khusus Mobile 
+
+// Auto-highlight saat scroll
+function initBnavScroll() {
+    const sections = ['hero', 'countdown', 'events', 'rsvp', 'guestbook'];
+    const items = document.querySelectorAll('.bnav-item');
+
+    window.addEventListener('scroll', () => {
+        let current = 'hero';
+
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                const top = el.getBoundingClientRect().top;
+
+                if (top <= 150) {
+                    current = id;
+                }
+            }
+        });
+
+        items.forEach(item => {
+            const href = item.getAttribute('href').replace('#', '');
+            item.classList.toggle('active', href === current);
+        });
+    });
+}
+
+function initAll() {
+    initCountdown();
+    initScrollReveal();
+    initGuestbook();
+    initQR();
+    initNav();
+    initBnavScroll();
+}
+
+
+//  footer navconst bottomNav = document.querySelector('#bottom-nav');
+const navItems = document.querySelectorAll('.bnav-item');
+const guestbook = document.querySelector('#guestbook');
+
+window.addEventListener('scroll', () => {
+    const guestbookTop = guestbook.getBoundingClientRect().top;
+    const screenHeight = window.innerHeight;
+
+    // 🚫 kalau sudah masuk guestbook → stop semua animasi nav
+    if (guestbookTop < screenHeight * 0.5) {
+        navItems.forEach(item => item.classList.remove('active'));
+        bottomNav.classList.add('nav-lock'); // kunci state
+        return;
+    }
+
+    // ✅ normal behavior (sebelum guestbook)
+    bottomNav.classList.remove('nav-lock');
+
+    document.querySelectorAll('section').forEach(section => {
+        const top = section.offsetTop - 100;
+        const bottom = top + section.offsetHeight;
+        const scroll = window.scrollY;
+
+        if (scroll >= top && scroll < bottom) {
+            navItems.forEach(item => item.classList.remove('active'));
+            const active = document.querySelector(`.bnav-item[href="#${section.id}"]`);
+            if (active) active.classList.add('active');
+        }
+    });
+});
