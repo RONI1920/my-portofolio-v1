@@ -271,6 +271,14 @@ updateClock(); // Panggil saat web baru dibuka
 // ==========================================
 // 2. FUNGSI JADWAL SHALAT (DENGAN CACHE & IKON)
 // ==========================================
+const PRAYER_ICONS = {
+    'subuh': '<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17.5 12a5.5 5.5 0 1 1-8.28-6.34A6.5 6.5 0 1 0 17.5 12Z" fill="currentColor" stroke="none"/><path d="M3 18h18M5 21h14"/></svg>',
+    'dzuhur': '<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+    'ashar': '<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 15a4 4 0 1 1 .5-7.97A5 5 0 0 1 18 9a3.5 3.5 0 0 1-.5 6.97H8Z"/></svg>',
+    'maghrib': '<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17.5 12a5.5 5.5 0 1 1-4.68-5.44A4.5 4.5 0 0 0 17.5 12Z" fill="currentColor" stroke="none"/></svg>',
+    'isya': '<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17.5 12a5.5 5.5 0 1 1-4.68-5.44A4.5 4.5 0 0 0 17.5 12Z" fill="currentColor" stroke="none"/><path d="M19 4l.6 1.4L21 6l-1.4.6L19 8l-.6-1.4L17 6l1.4-.6Z" fill="currentColor" stroke="none"/></svg>'
+};
+
 async function fetchPrayerTimes() {
     const prayerListEl = document.getElementById('prayer-list');
     if (!prayerListEl) return;
@@ -297,13 +305,13 @@ async function fetchPrayerTimes() {
         const data = await response.json();
         const timings = data.data.timings;
 
-        // Daftar shalat beserta ikonnya
+        // Daftar shalat beserta key ikonnya
         const prayers = [
-            { name: 'Subuh', time: timings.Fajr, icon: 'fa-person-praying' },
-            { name: 'Dzuhur', time: timings.Dhuhr, icon: 'fa-sun' },
-            { name: 'Ashar', time: timings.Asr, icon: 'fa-cloud-sun' },
-            { name: 'Maghrib', time: timings.Maghrib, icon: 'fa-moon' },
-            { name: 'Isya', time: timings.Isha, icon: 'fa-star-and-crescent' }
+            { name: 'Subuh', time: timings.Fajr, iconKey: 'subuh' },
+            { name: 'Dzuhur', time: timings.Dhuhr, iconKey: 'dzuhur' },
+            { name: 'Ashar', time: timings.Asr, iconKey: 'ashar' },
+            { name: 'Maghrib', time: timings.Maghrib, iconKey: 'maghrib' },
+            { name: 'Isya', time: timings.Isha, iconKey: 'isya' }
         ];
 
         // SIMPAN KE CACHE
@@ -323,7 +331,7 @@ function renderPrayers(prayers, container) {
     container.innerHTML = prayers.map(p => `
             <li class="prayer-item">
                 <div class="prayer-info">
-                    <i class="fa-solid ${p.icon} prayer-icon"></i>
+                    <span class="prayer-icon">${PRAYER_ICONS[p.iconKey] || ''}</span>
                     <span class="prayer-name">${p.name}</span>
                 </div>
                 <span class="prayer-time">${p.time}</span>

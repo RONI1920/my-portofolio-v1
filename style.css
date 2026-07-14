@@ -213,6 +213,7 @@ nav { display: flex; align-items: center; gap: 1.5rem; }
     width: 100%;
     max-width: 100%;
     height: auto;
+    aspect-ratio: 305 / 547;
     object-fit: contain;
     display: block;
 }
@@ -415,6 +416,13 @@ transform: translateY(-5px);
 .contact-label i {
     font-size: 1.1rem;
     color: var(--text);
+}
+
+.icon-svg {
+    width: 1.1em;
+    height: 1.1em;
+    vertical-align: -0.2em;
+    color: currentColor;
 }
 
 
