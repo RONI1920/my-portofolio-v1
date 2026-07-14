@@ -318,7 +318,7 @@ grid-template-columns: repeat(4, 1fr); /* 4 kolom di desktop */
 .github-profile-link { font-size: 0.8rem; color: var(--text-muted); }
 .github-profile-link a { color: var(--accent); }
 
-#repo-grid { display: flex; flex-direction: column; gap: 1rem; }
+#repo-grid { display: flex; flex-direction: column; gap: 1rem; min-height: 420px; }
 
 .project-card {
     border: 1px solid var(--border); border-radius: 4px;
@@ -439,6 +439,7 @@ footer span { font-size: 0.8rem; color: var(--text-muted); }
     flex-direction: column; /* Ini yang membuat elemen bertumpuk ke bawah */
     gap: 0.75rem;
     padding: 0;
+    min-height: 220px;
 }
 
 .prayer-item {
@@ -688,6 +689,7 @@ animation: pulse-animation 0.3s ease-in-out;
 .review-slider-wrapper {
     width: 100%;
     overflow: hidden;
+    min-height: 180px;
 }
 
 /* Track digerakkan murni oleh CSS animation — tidak perlu JS transform */
