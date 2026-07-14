@@ -416,11 +416,30 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// 🔥 CONFIG SUPABASE
+// 🔥 CONFIG SUPABASE (pakai REST API langsung, bukan SDK penuh — lebih ringan)
 const SUPABASE_URL = 'https://nkbqjdmiwmfbejbqsdyl.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rYnFqZG1pd21mYmVqYnFzZHlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMTAxMzUsImV4cCI6MjA5MTU4NjEzNX0.-58DEvE2wD3Y1NJbqIBI0qjCZ51gKRZpcemkkvevrgo';
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseREST = {
+    headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+    },
+    async select(query) {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/feedback?${query}`, { headers: this.headers });
+        if (!res.ok) throw new Error('Gagal mengambil data.');
+        return res.json();
+    },
+    async insert(row) {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/feedback`, {
+            method: 'POST',
+            headers: { ...this.headers, 'Prefer': 'return=minimal' },
+            body: JSON.stringify([row])
+        });
+        if (!res.ok) throw new Error('Gagal mengirim data.');
+    }
+};
 
 // 🎯 ELEMENT
 const feedbackForm = document.getElementById('feedback-form');
@@ -474,13 +493,10 @@ async function loadFeedback() {
     if (!feedbackList) return;
     feedbackList.innerHTML = "Loading...";
 
-    const { data, error } = await supabaseClient
-        .from('feedback')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(20);
-
-    if (error) {
+    let data;
+    try {
+        data = await supabaseREST.select('select=*&order=created_at.desc&limit=20');
+    } catch (error) {
         feedbackList.innerHTML = "<p>Gagal memuat feedback.</p>";
         console.error(error);
         return;
@@ -503,39 +519,7 @@ async function loadFeedback() {
     `).join('');
 }
 
-// 📤 SUBMIT FORM
-if (feedbackForm) {
-    feedbackForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const name = document.getElementById('fb-name').value;
-        const message = document.getElementById('fb-message').value;
-        const rating = ratingInput.value;
-
-        const { error } = await supabaseClient
-            .from('feedback')
-            .insert([{
-                name,
-                message,
-                rating
-            }]);
-
-        if (error) {
-            alert("Gagal: " + error.message);
-            console.error(error);
-            return;
-        }
-
-        alert("Berhasil!");
-        feedbackForm.reset();
-
-        // reset rating UI
-        ratingInput.value = 5;
-        stars.forEach(s => s.style.opacity = '1');
-
-        loadFeedback();
-    });
-}
+// (submit handler digabung jadi satu di bawah, lihat dekat reviewSlider)
 
 // ==========================================
 // REVIEW SLIDER — CSS MARQUEE INFINITE LOOP
@@ -585,12 +569,7 @@ const reviewSlider = (function () {
         if (!track) return;
 
         try {
-            const { data, error } = await supabaseClient
-                .from('feedback')
-                .select('name, message, rating')
-                .order('id', { ascending: false });
-
-            if (error) throw new Error(error.message);
+            const data = await supabaseREST.select('select=name,message,rating&order=id.desc');
 
             if (!data || !data.length) {
                 track.innerHTML = '<div class="review-loading">Belum ada ulasan.</div>';
@@ -620,7 +599,7 @@ const reviewSlider = (function () {
 
 })();
 
-// 📤 SUBMIT FORM — refresh slider setelah submit
+// 📤 SUBMIT FORM — satu-satunya handler (insert + refresh list + refresh slider)
 if (feedbackForm) {
     feedbackForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -629,11 +608,9 @@ if (feedbackForm) {
         const message = document.getElementById('fb-message').value;
         const rating = ratingInput.value;
 
-        const { error } = await supabaseClient
-            .from('feedback')
-            .insert([{ name, message, rating }]);
-
-        if (error) {
+        try {
+            await supabaseREST.insert({ name, message, rating });
+        } catch (error) {
             alert("Gagal: " + error.message);
             console.error(error);
             return;
